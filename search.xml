@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>群晖配置阿里云Docker镜像加速服务</title>
+    <url>/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/</url>
+    <content><![CDATA[<h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><p>环境DSM 6.2.3<br>Docker套件版本：18</p>
+<h1 id="群晖Web界面设置"><a href="#群晖Web界面设置" class="headerlink" title="群晖Web界面设置"></a>群晖Web界面设置</h1><p>先找到阿里云镜像加速服务，开通<br><a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a><br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/1.png"></p>
+<p>可在Docker套件-注册表中进行如下设置进行加速<br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/2.png"></p>
+<h1 id="SSH连接群晖修改配置文件（可选）"><a href="#SSH连接群晖修改配置文件（可选）" class="headerlink" title="SSH连接群晖修改配置文件（可选）"></a>SSH连接群晖修改配置文件（可选）</h1><p>也可以使用ssh连接到群晖，编辑以下文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/etc/dockerd.json</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/3.png"><br>保险起见，再修改一下这两个配置文件。这两个文件互相映射，改哪个都一样。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/target/config/dockerd.json</span><br><span class="line">vi /volume1/@appstore/Docker/config/dockerd.json	//volume1是套件保存的位置，根据自己实际情况填写</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/4.png"><br>测试安装一下镜像，速度不错。<br>不过下载Jellyfin依旧可能报错，不知道为什么。</p>
+<h1 id="解决Jellyfin多次下载失败"><a href="#解决Jellyfin多次下载失败" class="headerlink" title="解决Jellyfin多次下载失败"></a>解决Jellyfin多次下载失败</h1><p>如果多次下载Jellyfin还是失败，试试直接ssh连上群晖</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull jellyfin/jellyfin</span><br></pre></td></tr></table></figure>
+
+<p>这下就不会失败了，等待一会下载好后会在映像中显示出来<br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/5.png"></p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>黑群晖</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>静态托管Blog:Hexo+Github.io+Gitee镜像+个人域名+CDN</title>
     <url>/posts/MyBlog/</url>
     <content><![CDATA[<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>由于我事先已经安装，所以仅留下Git下载地址</p>
@@ -55,7 +81,6 @@
 <h3 id><a href="#" class="headerlink" title></a></h3>]]></content>
       <categories>
         <category>记录</category>
-        <category>折腾</category>
       </categories>
       <tags>
         <tag>折腾</tag>
@@ -142,32 +167,6 @@
         <tag>网络</tag>
         <tag>VPN</tag>
         <tag>隧道</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>群晖配置阿里云Docker镜像加速服务</title>
-    <url>/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/</url>
-    <content><![CDATA[<h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><p>环境DSM 6.2.3<br>Docker套件版本：18</p>
-<h1 id="群晖Web界面设置"><a href="#群晖Web界面设置" class="headerlink" title="群晖Web界面设置"></a>群晖Web界面设置</h1><p>先找到阿里云镜像加速服务，开通<br><a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a><br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/1.png"></p>
-<p>可在Docker套件-注册表中进行如下设置进行加速<br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/2.png"></p>
-<h1 id="SSH连接群晖修改配置文件（可选）"><a href="#SSH连接群晖修改配置文件（可选）" class="headerlink" title="SSH连接群晖修改配置文件（可选）"></a>SSH连接群晖修改配置文件（可选）</h1><p>也可以使用ssh连接到群晖，编辑以下文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/etc/dockerd.json</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/3.png"><br>保险起见，再修改一下这两个配置文件。这两个文件互相映射，改哪个都一样。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/target/config/dockerd.json</span><br><span class="line">vi /volume1/@appstore/Docker/config/dockerd.json	//volume1是套件保存的位置，根据自己实际情况填写</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/4.png"><br>测试安装一下镜像，速度不错。<br>不过下载Jellyfin依旧可能报错，不知道为什么。</p>
-<h1 id="解决Jellyfin多次下载失败"><a href="#解决Jellyfin多次下载失败" class="headerlink" title="解决Jellyfin多次下载失败"></a>解决Jellyfin多次下载失败</h1><p>如果多次下载Jellyfin还是失败，试试直接ssh连上群晖</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull jellyfin/jellyfin</span><br></pre></td></tr></table></figure>
-
-<p>这下就不会失败了，等待一会下载好后会在映像中显示出来<br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/5.png"></p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>折腾</tag>
-        <tag>黑群晖</tag>
       </tags>
   </entry>
   <entry>
