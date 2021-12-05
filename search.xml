@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>静态托管Blog:Hexo+Github.io+Gitee镜像+个人域名+CDN</title>
+    <url>/posts/MyBlog/</url>
+    <content><![CDATA[<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>由于我事先已经安装，所以仅留下Git下载地址</p>
+<p><a href="http://git-scm.com/download/win">http://git-scm.com/download/win</a></p>
+<h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>前往<a href="https://nodejs.org/zh-cn/">nodejs.org</a>下载并安装长期维护版</p>
+<h3 id="使用npm安装Hexo（全局安装）"><a href="#使用npm安装Hexo（全局安装）" class="headerlink" title="使用npm安装Hexo（全局安装）"></a>使用npm安装Hexo（全局安装）</h3><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npm install <span class="literal">-g</span> hexo<span class="literal">-cli</span></span><br></pre></td></tr></table></figure>
+
+<p>安装以后，可以使用以下两种方式执行 Hexo：</p>
+<ol>
+<li><code>npx hexo &lt;command&gt;</code></li>
+<li>将 Hexo 所在的目录下的 <code>node_modules</code> 添加到环境变量之中即可直接使用 <code>hexo &lt;command&gt;</code></li>
+</ol>
+<h3 id="初始化Hexo"><a href="#初始化Hexo" class="headerlink" title="初始化Hexo"></a>初始化Hexo</h3><p>使用以下命令初始化Hexo ，会在&lt;folder&gt;中新建所需要的文件</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo init &lt;folder&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第一篇Blog"><a href="#第一篇Blog" class="headerlink" title="第一篇Blog"></a>第一篇Blog</h3><h4 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h4><p>使用以下命令新建一篇博客</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo new &lt;文章名&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这时候就能在</p>
+<p>./Hexo/source/_posts目录下看到刚才建立的文章的markdown文件</p>
+<h4 id="本地查看文章"><a href="#本地查看文章" class="headerlink" title="本地查看文章"></a>本地查看文章</h4><p>使用以下命令生成静态文件，并开启本地Web服务器查看效果</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo clean	//删除生成的文件和缓存</span><br><span class="line">npx hexo generate	//生成静态文件</span><br><span class="line">npx hexo server	//启动本地Web服务器</span><br></pre></td></tr></table></figure>
+
+<p>上传文章到Gitpage</p>
+<p>可使用以下命令上传到Gitpage，不过在此之前需要对./Hexo目录下的**_config.yml**进行修改</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">url: &lt;你的gitpage地址&gt;</span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &lt;你的gitpage地址&gt;</span><br><span class="line">  branch: master	//要特别说明一下上传的分支，github创建的gitpage默认使用main分支，需要在仓库的gitpage相关设置更改分支为master分支，或者干脆直接上传到main分支里面</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>如果之前没有配置git，还需配置git，网上教程比较多，不再赘述。</p>
+<h3 id="上传图片踩坑"><a href="#上传图片踩坑" class="headerlink" title="上传图片踩坑"></a>上传图片踩坑</h3><h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><h5 id="安装hexo-asset-image修改版插件"><a href="#安装hexo-asset-image修改版插件" class="headerlink" title="安装hexo-asset-image修改版插件"></a>安装hexo-asset-image修改版插件</h5><p><a href="https://github.com/xcodebuild/hexo-asset-image">https://github.com/xcodebuild/hexo-asset-image</a></p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/xcodebuild/hexo<span class="literal">-asset</span><span class="literal">-image</span> -<span class="literal">-save</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="开启post-asset-folder"><a href="#开启post-asset-folder" class="headerlink" title="开启post_asset_folder"></a>开启post_asset_folder</h5><p>关于post_asset_folder，官方文档这样描述：</p>
+<blockquote>
+<p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout] &lt;title&gt;</code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。将所有与你的文章有关的资源放在这个关联文件夹中之后，你可以通过相对路径来引用它们，这样你就得到了一个更简单而且方便得多的工作流。</p>
+</blockquote>
+<p>编辑<strong>Hexo根目录</strong>下的**_config.yml**</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="效果测试"><a href="#效果测试" class="headerlink" title="效果测试"></a>效果测试</h4><p>使用以下命令新建一篇文章，将会在 *<em>source\_posts\*</em> 目录下生成 <strong>new_blog.md</strong> 和 <strong>new_blog文件夹</strong></p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo new <span class="string">&quot;new_blog&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在<strong>new_blog.md</strong>中<strong>使用相对路径</strong>引用<strong>new_blog文件夹</strong>下的1.jpg</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![](Blog\1.jpg)</span><br></pre></td></tr></table></figure>
+
+<p>清空Hexo缓存，重新编译后开启本地web测试效果</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo clean</span><br><span class="line">npx hexo generate</span><br><span class="line">npx hexo server</span><br></pre></td></tr></table></figure>
+
+<p>本地web可正常显示，图片路径一切正常</p>
+<p><img src="/posts/MyBlog/1.png" alt="测试正常"></p>
+<h3 id><a href="#" class="headerlink" title></a></h3>]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SOCKS5&amp;HTTP代理</title>
     <url>/posts/SOCKS5&amp;HTTP%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://zgao.top/%E5%A5%87%E5%AE%89%E4%BF%A1%E5%AE%9E%E4%B9%A0%E4%BA%94-socks5%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/">《奇安信实习(五)-Socks5协议抓包分析》</a><br><a href="https://reezon.github.io/2018/05/23/%E5%85%B3%E4%BA%8Ess(%E9%85%B8%E9%85%B8)%E5%92%8Cssr(%E9%85%B8%E9%85%B8%E4%B9%B3)%EF%BC%8C%E8%BF%98%E6%9C%89vpn%E5%92%8Csocks5/">《关于ss(酸酸)和ssr(酸酸乳)，还有vpn和socks5》</a></p>
@@ -83,93 +144,6 @@
       </tags>
   </entry>
   <entry>
-    <title>群晖配置阿里云Docker镜像加速服务</title>
-    <url>/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/</url>
-    <content><![CDATA[<h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><p>环境DSM 6.2.3<br>Docker套件版本：18</p>
-<h1 id="群晖Web界面设置"><a href="#群晖Web界面设置" class="headerlink" title="群晖Web界面设置"></a>群晖Web界面设置</h1><p>先找到阿里云镜像加速服务，开通<br><a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a><br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/1.png"></p>
-<p>可在Docker套件-注册表中进行如下设置进行加速<br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/2.png"></p>
-<h1 id="SSH连接群晖修改配置文件（可选）"><a href="#SSH连接群晖修改配置文件（可选）" class="headerlink" title="SSH连接群晖修改配置文件（可选）"></a>SSH连接群晖修改配置文件（可选）</h1><p>也可以使用ssh连接到群晖，编辑以下文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/etc/dockerd.json</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/3.png"><br>保险起见，再修改一下这两个配置文件。这两个文件互相映射，改哪个都一样。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/target/config/dockerd.json</span><br><span class="line">vi /volume1/@appstore/Docker/config/dockerd.json	//volume1是套件保存的位置，根据自己实际情况填写</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/4.png"><br>测试安装一下镜像，速度不错。<br>不过下载Jellyfin依旧可能报错，不知道为什么。</p>
-<h1 id="解决Jellyfin多次下载失败"><a href="#解决Jellyfin多次下载失败" class="headerlink" title="解决Jellyfin多次下载失败"></a>解决Jellyfin多次下载失败</h1><p>如果多次下载Jellyfin还是失败，试试直接ssh连上群晖</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull jellyfin/jellyfin</span><br></pre></td></tr></table></figure>
-
-<p>这下就不会失败了，等待一会下载好后会在映像中显示出来<br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/5.png"></p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>折腾</tag>
-        <tag>黑群晖</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>静态托管Blog:Hexo+Github.io+Gitee镜像+个人域名+CDN</title>
-    <url>/posts/MyBlog/</url>
-    <content><![CDATA[<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>由于我事先已经安装，所以仅留下Git下载地址</p>
-<p><a href="http://git-scm.com/download/win">http://git-scm.com/download/win</a></p>
-<h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>前往<a href="https://nodejs.org/zh-cn/">nodejs.org</a>下载并安装长期维护版</p>
-<h3 id="使用npm安装Hexo（全局安装）"><a href="#使用npm安装Hexo（全局安装）" class="headerlink" title="使用npm安装Hexo（全局安装）"></a>使用npm安装Hexo（全局安装）</h3><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npm install <span class="literal">-g</span> hexo<span class="literal">-cli</span></span><br></pre></td></tr></table></figure>
-
-<p>安装以后，可以使用以下两种方式执行 Hexo：</p>
-<ol>
-<li><code>npx hexo &lt;command&gt;</code></li>
-<li>将 Hexo 所在的目录下的 <code>node_modules</code> 添加到环境变量之中即可直接使用 <code>hexo &lt;command&gt;</code></li>
-</ol>
-<h3 id="初始化Hexo"><a href="#初始化Hexo" class="headerlink" title="初始化Hexo"></a>初始化Hexo</h3><p>使用以下命令初始化Hexo ，会在&lt;folder&gt;中新建所需要的文件</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo init &lt;folder&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="第一篇Blog"><a href="#第一篇Blog" class="headerlink" title="第一篇Blog"></a>第一篇Blog</h3><h4 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h4><p>使用以下命令新建一篇博客</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo new &lt;文章名&gt;</span><br></pre></td></tr></table></figure>
-
-<p>这时候就能在</p>
-<p>./Hexo/source/_posts目录下看到刚才建立的文章的markdown文件</p>
-<h4 id="本地查看文章"><a href="#本地查看文章" class="headerlink" title="本地查看文章"></a>本地查看文章</h4><p>使用以下命令生成静态文件，并开启本地Web服务器查看效果</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo clean	//删除生成的文件和缓存</span><br><span class="line">npx hexo generate	//生成静态文件</span><br><span class="line">npx hexo server	//启动本地Web服务器</span><br></pre></td></tr></table></figure>
-
-<p>上传文章到Gitpage</p>
-<p>可使用以下命令上传到Gitpage，不过在此之前需要对./Hexo目录下的**_config.yml**进行修改</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">url: &lt;你的gitpage地址&gt;</span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &lt;你的gitpage地址&gt;</span><br><span class="line">  branch: master	//要特别说明一下上传的分支，github创建的gitpage默认使用main分支，需要在仓库的gitpage相关设置更改分支为master分支，或者干脆直接上传到main分支里面</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>如果之前没有配置git，还需配置git，网上教程比较多，不再赘述。</p>
-<h3 id="上传图片踩坑"><a href="#上传图片踩坑" class="headerlink" title="上传图片踩坑"></a>上传图片踩坑</h3><h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><h5 id="安装hexo-asset-image修改版插件"><a href="#安装hexo-asset-image修改版插件" class="headerlink" title="安装hexo-asset-image修改版插件"></a>安装hexo-asset-image修改版插件</h5><p><a href="https://github.com/xcodebuild/hexo-asset-image">https://github.com/xcodebuild/hexo-asset-image</a></p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/xcodebuild/hexo<span class="literal">-asset</span><span class="literal">-image</span> -<span class="literal">-save</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="开启post-asset-folder"><a href="#开启post-asset-folder" class="headerlink" title="开启post_asset_folder"></a>开启post_asset_folder</h5><p>关于post_asset_folder，官方文档这样描述：</p>
-<blockquote>
-<p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout] &lt;title&gt;</code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。将所有与你的文章有关的资源放在这个关联文件夹中之后，你可以通过相对路径来引用它们，这样你就得到了一个更简单而且方便得多的工作流。</p>
-</blockquote>
-<p>编辑<strong>Hexo根目录</strong>下的**_config.yml**</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="效果测试"><a href="#效果测试" class="headerlink" title="效果测试"></a>效果测试</h4><p>使用以下命令新建一篇文章，将会在 *<em>source\_posts\*</em> 目录下生成 <strong>new_blog.md</strong> 和 <strong>new_blog文件夹</strong></p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo new <span class="string">&quot;new_blog&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>在<strong>new_blog.md</strong>中<strong>使用相对路径</strong>引用<strong>new_blog文件夹</strong>下的1.jpg</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![](Blog\1.jpg)</span><br></pre></td></tr></table></figure>
-
-<p>清空Hexo缓存，重新编译后开启本地web测试效果</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo clean</span><br><span class="line">npx hexo generate</span><br><span class="line">npx hexo server</span><br></pre></td></tr></table></figure>
-
-<p>本地web可正常显示，图片路径一切正常</p>
-<p><img src="/posts/MyBlog/1.png" alt="测试正常"></p>
-<h3 id><a href="#" class="headerlink" title></a></h3>]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>折腾</tag>
-        <tag>博客</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>黑群晖升级DSM6.2.3-25426</title>
     <url>/posts/%E9%BB%91%E7%BE%A4%E6%99%96%E5%8D%87%E7%BA%A7DSM6.2.3-25426/</url>
     <content><![CDATA[<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>群晖现在是DSM 6.2.1-23824 Update 6版本，使用第三方手机软件派派助手发现控制台打不开，朋友的DSM 6.2.3-25426却正常。</p>
@@ -226,6 +200,32 @@
 <h2 id="升级完成"><a href="#升级完成" class="headerlink" title="升级完成"></a>升级完成</h2><p>重启开机后系统就升级成功了</p>
 <p>检查一下核显硬解或者其他容易出BUG的地方（网卡）看看有没有问题吧</p>
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://mianao.info/2021/07/18/%E9%BB%91%E7%BE%A4%E6%99%96%E5%8D%87%E7%BA%A7%E5%88%B06-2-3">《黑群晖升级到6.2.3》</a><br><a href="https://wp.gxnas.com/7407.html">《关于DSM6.23版本安装/升级的说明及img引导文件（含918硬解补丁文件）和PAT安装包下载地址》</a></p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>黑群晖</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>群晖配置阿里云Docker镜像加速服务</title>
+    <url>/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/</url>
+    <content><![CDATA[<h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><p>环境DSM 6.2.3<br>Docker套件版本：18</p>
+<h1 id="群晖Web界面设置"><a href="#群晖Web界面设置" class="headerlink" title="群晖Web界面设置"></a>群晖Web界面设置</h1><p>先找到阿里云镜像加速服务，开通<br><a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a><br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/1.png"></p>
+<p>可在Docker套件-注册表中进行如下设置进行加速<br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/2.png"></p>
+<h1 id="SSH连接群晖修改配置文件（可选）"><a href="#SSH连接群晖修改配置文件（可选）" class="headerlink" title="SSH连接群晖修改配置文件（可选）"></a>SSH连接群晖修改配置文件（可选）</h1><p>也可以使用ssh连接到群晖，编辑以下文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/etc/dockerd.json</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/3.png"><br>保险起见，再修改一下这两个配置文件。这两个文件互相映射，改哪个都一样。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/target/config/dockerd.json</span><br><span class="line">vi /volume1/@appstore/Docker/config/dockerd.json	//volume1是套件保存的位置，根据自己实际情况填写</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/4.png"><br>测试安装一下镜像，速度不错。<br>不过下载Jellyfin依旧可能报错，不知道为什么。</p>
+<h1 id="解决Jellyfin多次下载失败"><a href="#解决Jellyfin多次下载失败" class="headerlink" title="解决Jellyfin多次下载失败"></a>解决Jellyfin多次下载失败</h1><p>如果多次下载Jellyfin还是失败，试试直接ssh连上群晖</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull jellyfin/jellyfin</span><br></pre></td></tr></table></figure>
+
+<p>这下就不会失败了，等待一会下载好后会在映像中显示出来<br><img src="/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/5.png"></p>
 ]]></content>
       <categories>
         <category>记录</category>
