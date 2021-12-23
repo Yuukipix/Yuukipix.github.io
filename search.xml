@@ -144,6 +144,81 @@
       </tags>
   </entry>
   <entry>
+    <title>使用Wireguard打通NAT实现LAN-to-LAN</title>
+    <url>/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/</url>
+    <content><![CDATA[<p><img src="/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/1.png"><br>本次实验是使用Wireguard打通NAT实现公网腾讯云和教务网的互访。<br>应用场景：</p>
+<ul>
+<li>在内网搭建一台跳板机</li>
+<li>通过实验学习内网渗透中的关于网段、流量转发等相关网络知识 </li>
+</ul>
+<p>Wireguard优势：</p>
+<ul>
+<li>开源</li>
+<li>流量加密</li>
+<li>易于配置</li>
+<li>生态全（Windows、Linux、Android、iOS、macOS都有客户端）</li>
+</ul>
+<p>应用条件：</p>
+<ul>
+<li>一台有公网地址的服务器</li>
+<li>内网有一台跳板机（能同时访问内网和外网，不需要有公网地址）</li>
+</ul>
+<h3 id="安装wireguard"><a href="#安装wireguard" class="headerlink" title="安装wireguard"></a>安装wireguard</h3><p>公网腾讯云：docker版</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">  --name=wireguard \</span><br><span class="line">  --cap-add=NET_ADMIN \</span><br><span class="line">  --cap-add=SYS_MODULE \</span><br><span class="line">  -e PUID=1000 \</span><br><span class="line">  -e PGID=1000 \</span><br><span class="line">  -e TZ=Europe/London \</span><br><span class="line">  -e SERVERURL=wireguard.domain.com `#optional` \</span><br><span class="line">  -e SERVERPORT=51820 `#optional` \</span><br><span class="line">  -e PEERS=1 `#optional` \</span><br><span class="line">  -e PEERDNS=auto `#optional` \</span><br><span class="line">  -e INTERNAL_SUBNET=10.13.13.0 `#optional` \</span><br><span class="line">  -e ALLOWEDIPS=0.0.0.0/0 `#optional` \</span><br><span class="line">  -p 51820:51820/udp \</span><br><span class="line">  -v /path/to/appdata/config:/config \</span><br><span class="line">  -v /lib/modules:/lib/modules \</span><br><span class="line">  --sysctl=&quot;net.ipv4.conf.all.src_valid_mark=1&quot; \</span><br><span class="line">  --restart unless-stopped \</span><br><span class="line">  linuxserver/wireguard</span><br></pre></td></tr></table></figure>
+
+<p>内网跳板机：直接安装到宿主机</p>
+<h3 id="Wireguard基本知识"><a href="#Wireguard基本知识" class="headerlink" title="Wireguard基本知识"></a>Wireguard基本知识</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#wireguard配置文件位置</span><br><span class="line">/etc/wireguard/</span><br><span class="line"></span><br><span class="line">默认配置文件/etc/wireguard/wg0.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#使用wg-quick 快速连接/断开 接口</span><br><span class="line">wg-quick up &lt;配置文件名&gt;</span><br><span class="line">wg-quick down &lt;配置文件名&gt;</span><br><span class="line"></span><br><span class="line">eg:wg-quick up wg0	//自动读取/etc/wireguard/wg0.conf，连接wg0接口</span><br><span class="line">eg:wg-quick up wg0	//会自动读取/etc/wireguard/wg0.conf，断开wg0接口</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#linuxserver/wireguard 此docker镜像支持使用命令行输出对应节点二维码，使用手机客户端扫码可以快速连接</span><br><span class="line">docker exec -it wireguard /app/show-peer 1 2</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#docker镜像中客户端的.conf配置文件目录</span><br><span class="line">/config</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/2.png"></p>
+<h3 id="配置wireguard服务器端"><a href="#配置wireguard服务器端" class="headerlink" title="配置wireguard服务器端"></a>配置wireguard服务器端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /etc/wireguard</span><br><span class="line"></span><br><span class="line">vi wg0.conf</span><br><span class="line">将下方红框中的内容填入AllowedIPs</span><br></pre></td></tr></table></figure>
+
+<h3 id><a href="#" class="headerlink" title></a><img src="/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/3.png"></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#重启wireguard服务端</span><br><span class="line">wg-quick down wg0</span><br><span class="line">wg-quick up wg0</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置wireguard客户端"><a href="#配置wireguard客户端" class="headerlink" title="配置wireguard客户端"></a>配置wireguard客户端</h3><p>获取配置文件（在容器中进行操作）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /config/peer1</span><br><span class="line"></span><br><span class="line">ls</span><br><span class="line">peer1.conf  peer1.png  privatekey-peer1  publickey-peer1</span><br><span class="line"></span><br><span class="line">vi peer1.conf</span><br></pre></td></tr></table></figure>
+
+<p>复制屏幕上显示的内容，然后稍作修改<br><img src="/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/4.png"><br>修改的地方是</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">#配置客户端NAT，确保服务器可以访问客户端后面的网络</span><br><span class="line">PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line"></span><br><span class="line">[Peer]</span><br><span class="line">#修改客户端路由的IP段</span><br><span class="line">10.13.13.0/24,10.9.0.0/29</span><br><span class="line">#配置隧道保活时间</span><br><span class="line">PersistentKeepalive = 1</span><br></pre></td></tr></table></figure>
+
+<p>修改后的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Interface]</span><br><span class="line">Address = 10.13.13.2</span><br><span class="line">PrivateKey = *******************************</span><br><span class="line">ListenPort = 51820</span><br><span class="line">PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line"></span><br><span class="line">[Peer]</span><br><span class="line">PublicKey = *******************************</span><br><span class="line">Endpoint = **************:51820</span><br><span class="line">AllowedIPs = 10.13.13.0/24,10.9.0.0/29</span><br><span class="line">PersistentKeepalive = 1</span><br></pre></td></tr></table></figure>
+
+<p>SSH连接上内网的跳板机</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /etc/wireguard</span><br><span class="line"></span><br><span class="line">vi wg0.conf</span><br><span class="line">然后将刚才编辑好的配置文件粘贴进去</span><br><span class="line"></span><br><span class="line">#开启内网客户端与服务器的连接</span><br><span class="line">wg-quick up wg0</span><br><span class="line"></span><br><span class="line">#测试能不能ping通服务器</span><br><span class="line">ping 10.13.13.1</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试服务端能否ping通客户端后的内网"><a href="#测试服务端能否ping通客户端后的内网" class="headerlink" title="测试服务端能否ping通客户端后的内网"></a>测试服务端能否ping通客户端后的内网</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ping 172.13.1.32</span><br><span class="line"></span><br><span class="line">root@62d21fb82751:/# ping 172.13.1.32</span><br><span class="line">PING 172.13.1.32 (172.13.1.32) 56(84) bytes of data.</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=1 ttl=124 time=50.1 ms</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=2 ttl=124 time=55.8 ms</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=3 ttl=124 time=52.8 ms</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=4 ttl=124 time=50.7 ms</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=5 ttl=124 time=50.1 ms</span><br><span class="line">--- 172.13.1.32 ping statistics ---</span><br><span class="line">5 packets transmitted, 5 received, 0% packet loss, time 4005ms</span><br><span class="line">rtt min/avg/max/mdev = 50.119/51.961/55.893/2.221 ms</span><br></pre></td></tr></table></figure>
+
+<p>成功ping通</p>
+<h3 id="使用nginx反代内网网站"><a href="#使用nginx反代内网网站" class="headerlink" title="使用nginx反代内网网站"></a>使用nginx反代内网网站</h3><p>因为客户端和服务器端都有172.17.0.0/16这条路由（docker bridge模式默认网段），可能会冲突。<br>我在portainer建立了一个新的docker网络，供wireguard服务端和nginx使用。<br><img src="/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/5.png"><br>将刚才配置好的wireguard服务端移动到新建的网络中。<br>然后从dockerhub拉取nginx，新建容器。<br><img src="/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/6.png"><br><img src="/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/7.png"><br>给宿主机添加一条路由表，其中10.9.0.2是wireguard容器在docker网络中的一个内网地址，添加这条路由的作用是去172.13.1.32的数据包走wireguard进行转发</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">route add -net 172.13.1.32 netmask 255.255.255.255 gateway 10.9.0.2</span><br></pre></td></tr></table></figure>
+
+<p>测试在宿主机ping172.13.1.32</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ping 172.13.1.32</span><br><span class="line"></span><br><span class="line">PING 172.13.1.32 (172.13.1.32) 56(84) bytes of data.</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=1 ttl=123 time=50.7 ms</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=2 ttl=123 time=290 ms</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=3 ttl=123 time=49.2 ms</span><br><span class="line">64 bytes from 172.13.1.32: icmp_seq=4 ttl=123 time=230 ms</span><br><span class="line">--- 172.13.1.32 ping statistics ---</span><br><span class="line">4 packets transmitted, 4 received, 0% packet loss, time 3000ms</span><br><span class="line">rtt min/avg/max/mdev = 49.233/155.022/290.021/107.176 ms</span><br></pre></td></tr></table></figure>
+
+<p>成功ping通<br>这下只需要配置nginx的反向代理了，因为宿主机都通网了，宿主机下面的容器去172.13.1.32就不用再做配置了<br>​</p>
+<p>启动nginx容器，编辑配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/nginx/conf.d/default.conf</span><br></pre></td></tr></table></figure>
+
+<p>配置nginx反向代理<br><img src="/posts/%E4%BD%BF%E7%94%A8Wireguard%E6%89%93%E9%80%9ANAT%E5%AE%9E%E7%8E%B0LAN-to-LAN/8.png"><br>到这一步就配置完成了，可以访问ip对应的端口号进行测试查看有没有反代成功</p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>VPN</tag>
+        <tag>隧道</tag>
+        <tag>Wireguard</tag>
+        <tag>NGINX反向代理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>群晖配置阿里云Docker镜像加速服务</title>
     <url>/posts/%E7%BE%A4%E6%99%96%E9%85%8D%E7%BD%AE%E9%98%BF%E9%87%8C%E4%BA%91Docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1/</url>
     <content><![CDATA[<h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><p>环境DSM 6.2.3<br>Docker套件版本：18</p>
