@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>静态托管Blog:Hexo+Github.io+Gitee镜像+个人域名+CDN</title>
+    <title>静态托管Blog:Hexo+Github Pages+个人域名+CDN</title>
     <url>/posts/MyBlog/</url>
-    <content><![CDATA[<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>由于我事先已经安装，所以仅留下Git下载地址</p>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>为什么要使用这套方案？<br>使用这套方案成本更低，无需担心服务器被攻击，无需维护服务器，也不用担心服务器到期。</p>
+<p>国内购买的域名无需备案就能使用别名解析到Github Pages服务器，但使用国内的CDN服务需要备案。</p>
+<h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>由于我事先已经安装，所以仅留下Git下载地址</p>
 <p><a href="http://git-scm.com/download/win">http://git-scm.com/download/win</a></p>
 <h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>前往<a href="https://nodejs.org/zh-cn/">nodejs.org</a>下载并安装长期维护版</p>
 <h3 id="使用npm安装Hexo（全局安装）"><a href="#使用npm安装Hexo（全局安装）" class="headerlink" title="使用npm安装Hexo（全局安装）"></a>使用npm安装Hexo（全局安装）</h3><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npm install <span class="literal">-g</span> hexo<span class="literal">-cli</span></span><br></pre></td></tr></table></figure>
@@ -13,7 +15,7 @@
 <li><code>npx hexo &lt;command&gt;</code></li>
 <li>将 Hexo 所在的目录下的 <code>node_modules</code> 添加到环境变量之中即可直接使用 <code>hexo &lt;command&gt;</code></li>
 </ol>
-<h3 id="初始化Hexo"><a href="#初始化Hexo" class="headerlink" title="初始化Hexo"></a>初始化Hexo</h3><p>使用以下命令初始化Hexo ，会在&lt;folder&gt;中新建所需要的文件</p>
+<h2 id="开始写博客"><a href="#开始写博客" class="headerlink" title="开始写博客"></a>开始写博客</h2><h3 id="初始化Hexo"><a href="#初始化Hexo" class="headerlink" title="初始化Hexo"></a>初始化Hexo</h3><p>使用以下命令初始化Hexo ，会在&lt;folder&gt;中新建所需要的文件</p>
 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo init &lt;folder&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="第一篇Blog"><a href="#第一篇Blog" class="headerlink" title="第一篇Blog"></a>第一篇Blog</h3><h4 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h4><p>使用以下命令新建一篇博客</p>
@@ -21,7 +23,7 @@
 
 <p>这时候就能在</p>
 <p>./Hexo/source/_posts目录下看到刚才建立的文章的markdown文件</p>
-<h4 id="本地查看文章"><a href="#本地查看文章" class="headerlink" title="本地查看文章"></a>本地查看文章</h4><p>使用以下命令生成静态文件，并开启本地Web服务器查看效果</p>
+<h4 id="本地开启server查看文章"><a href="#本地开启server查看文章" class="headerlink" title="本地开启server查看文章"></a>本地开启server查看文章</h4><p>使用以下命令生成静态文件，并开启本地Web服务器查看效果</p>
 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo clean	//删除生成的文件和缓存</span><br><span class="line">npx hexo generate	//生成静态文件</span><br><span class="line">npx hexo server	//启动本地Web服务器</span><br></pre></td></tr></table></figure>
 
 <p>上传文章到Gitpage</p>
@@ -31,7 +33,7 @@
 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npx hexo deploy</span><br></pre></td></tr></table></figure>
 
 <p>如果之前没有配置git，还需配置git，网上教程比较多，不再赘述。</p>
-<h3 id="上传图片踩坑"><a href="#上传图片踩坑" class="headerlink" title="上传图片踩坑"></a>上传图片踩坑</h3><h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><h5 id="安装hexo-asset-image修改版插件"><a href="#安装hexo-asset-image修改版插件" class="headerlink" title="安装hexo-asset-image修改版插件"></a>安装hexo-asset-image修改版插件</h5><p><a href="https://github.com/xcodebuild/hexo-asset-image">https://github.com/xcodebuild/hexo-asset-image</a></p>
+<h3 id="图片无法显示踩坑"><a href="#图片无法显示踩坑" class="headerlink" title="图片无法显示踩坑"></a>图片无法显示踩坑</h3><h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><h5 id="安装hexo-asset-image修改版插件"><a href="#安装hexo-asset-image修改版插件" class="headerlink" title="安装hexo-asset-image修改版插件"></a>安装hexo-asset-image修改版插件</h5><p><a href="https://github.com/xcodebuild/hexo-asset-image">https://github.com/xcodebuild/hexo-asset-image</a></p>
 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/xcodebuild/hexo<span class="literal">-asset</span><span class="literal">-image</span> -<span class="literal">-save</span></span><br></pre></td></tr></table></figure>
 
 <h5 id="开启post-asset-folder"><a href="#开启post-asset-folder" class="headerlink" title="开启post_asset_folder"></a>开启post_asset_folder</h5><p>关于post_asset_folder，官方文档这样描述：</p>
@@ -52,7 +54,65 @@
 
 <p>本地web可正常显示，图片路径一切正常</p>
 <p><img src="/posts/MyBlog/1.png" alt="测试正常"></p>
-<h3 id><a href="#" class="headerlink" title></a></h3>]]></content>
+<h2 id="将博客托管到Github-Pages"><a href="#将博客托管到Github-Pages" class="headerlink" title="将博客托管到Github Pages"></a>将博客托管到Github Pages</h2><h3 id="在Github中新建仓库"><a href="#在Github中新建仓库" class="headerlink" title="在Github中新建仓库"></a>在Github中新建仓库</h3><p>注意：命名需以【你希望的名字】.github.io命名</p>
+<p>后续就可以使用这个地址进行访问，比如我的就是</p>
+<p><img src="/posts/MyBlog/2.png"></p>
+<h3 id="在仓库中启用Github-Pages"><a href="#在仓库中启用Github-Pages" class="headerlink" title="在仓库中启用Github Pages"></a>在仓库中启用Github Pages</h3><p>进入刚才建立仓库的设置，找到pages相关选项</p>
+<p><img src="/posts/MyBlog/3.png"></p>
+<p><img src="/posts/MyBlog/4.png"></p>
+<p>然后根据提示开启Github Pages即可</p>
+<h3 id="使用npx-hexo-deploy上传博客文件到Github仓库"><a href="#使用npx-hexo-deploy上传博客文件到Github仓库" class="headerlink" title="使用npx hexo -deploy上传博客文件到Github仓库"></a>使用npx hexo -deploy上传博客文件到Github仓库</h3><h4 id="编辑Hexo配置文件"><a href="#编辑Hexo配置文件" class="headerlink" title="编辑Hexo配置文件"></a>编辑Hexo配置文件</h4><p>找到Hexo安装目录下的_config.yml文件<br>找到deploy这一项，修改rebo为你刚才创建仓库的地址</p>
+<p><img src="/posts/MyBlog/5.png"></p>
+<p><img src="/posts/MyBlog/6.png"></p>
+<h4 id="编译并上传博客到Github仓库"><a href="#编译并上传博客到Github仓库" class="headerlink" title="编译并上传博客到Github仓库"></a>编译并上传博客到Github仓库</h4><p>在博客根目录执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npx hexo clean</span><br><span class="line">npx hexo generate</span><br><span class="line">npx hexo deploy	//上传Hexo目录下的public文件夹到Github仓库</span><br></pre></td></tr></table></figure>
+
+<p>如果是第一次使用，则可能会提示登录Github账号，因为在2020年7月之后Github宣布使用Git需要基于令牌的身份验证，所以Git 操作进行身份验证时不再接受帐户密码。下面进行Git令牌配置操作。</p>
+<h4 id="Git使用令牌登录"><a href="#Git使用令牌登录" class="headerlink" title="Git使用令牌登录"></a>Git使用令牌登录</h4><h5 id="进入个人设置页面"><a href="#进入个人设置页面" class="headerlink" title="进入个人设置页面"></a>进入个人设置页面</h5><p><img src="/posts/MyBlog/7.png"></p>
+<h5 id="找到Developer-settings"><a href="#找到Developer-settings" class="headerlink" title="找到Developer settings"></a>找到Developer settings</h5><p><img src="/posts/MyBlog/8.png"></p>
+<h5 id="进入Personal-access-tokens，使用Generate-new-token新建Token"><a href="#进入Personal-access-tokens，使用Generate-new-token新建Token" class="headerlink" title="进入Personal access tokens，使用Generate new token新建Token"></a>进入Personal access tokens，使用Generate new token新建Token</h5><p><img src="/posts/MyBlog/9.png"></p>
+<p>在Note中填上名字或备注<br>Expiration中选择过期时间（我选择了无限期）<br>Select scopes中勾选repo就行，其他的可以不用开</p>
+<p><img src="/posts/MyBlog/10.png"></p>
+<p>然后拉到本页面最下面，点击Generate Token就行了</p>
+<h5 id="如何使用令牌"><a href="#如何使用令牌" class="headerlink" title="如何使用令牌"></a>如何使用令牌</h5><p>将生成的令牌复制到剪贴板。使用Git上传文件到仓库时，提示登录账号时密码替换成Token即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">账号：你的Github账号</span><br><span class="line">密码：你刚才复制的Token</span><br></pre></td></tr></table></figure>
+
+<h2 id="绑定个人域名"><a href="#绑定个人域名" class="headerlink" title="绑定个人域名"></a>绑定个人域名</h2><p>个人域名需要提前购买，博主是从dnspod上购买的域名。</p>
+<p>在仓库的Pages选项中填写你购买的个人域名</p>
+<p><img src="/posts/MyBlog/11.png"></p>
+<p>然后在域名提供商的控制面板中将对应的主机记录通过别名（CNAME）解析到你的Github Pages的域名</p>
+<p><img src="/posts/MyBlog/12.png"></p>
+<p>等待几分钟你就能使用你的个人域名访问Github Pages上的博客了</p>
+<h2 id="给个人博客开启HTTPS"><a href="#给个人博客开启HTTPS" class="headerlink" title="给个人博客开启HTTPS"></a>给个人博客开启HTTPS</h2><p>在Github仓库中开启Enforce HTTPS</p>
+<p><img src="/posts/MyBlog/13.png"></p>
+<p>在域名提供商处申请免费SSL证书</p>
+<p><img src="/posts/MyBlog/14.png"></p>
+<p>等待证书颁发完成后，dnspod会自动在dns上做相关解析，现在就可以使用HTTPS+个人域名访问你的博客了</p>
+<h2 id="使用CDN加速博客"><a href="#使用CDN加速博客" class="headerlink" title="使用CDN加速博客"></a>使用CDN加速博客</h2><p>域名绑定好了，但是发现有时候打开博客很慢，于是使用CDN加速博客。</p>
+<p>为什么选择又拍云？<br>因为加入开发者联盟每个月有免费的加速流量。基本不用花钱。</p>
+<h3 id="配置又拍云加速国内"><a href="#配置又拍云加速国内" class="headerlink" title="配置又拍云加速国内"></a>配置又拍云加速国内</h3><p>前提：域名已经通过备案    未备案的域名无法使用国内CDN服务</p>
+<h4 id="加入又拍云联盟"><a href="#加入又拍云联盟" class="headerlink" title="加入又拍云联盟"></a>加入又拍云联盟</h4><h5 id="页面下方加入又拍云的logo和链接（申请加入的条件）"><a href="#页面下方加入又拍云的logo和链接（申请加入的条件）" class="headerlink" title="页面下方加入又拍云的logo和链接（申请加入的条件）"></a>页面下方加入又拍云的logo和链接（申请加入的条件）</h5><p>我使用主题的是butterfly，在Hexo根目录对_config.butterfly.yml文件的footer-custom_text进行修改即可</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;style type=&quot;text/css&quot;&gt; img&#123; vertical-align:middle;&#125; &lt;/style&gt; &lt;a href=&quot;https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral&quot;&gt;&lt;span&gt;本站由 &lt;img class=&quot;upyun-icon&quot; src=&quot;/img/upyun.png&quot; width=&quot;5%&quot;&gt; 提供CDN加速/云存储服务&lt;/span&gt;&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/MyBlog/15.png"></p>
+<p>效果展示</p>
+<p><img src="/posts/MyBlog/Hexo\source_posts\MyBlog\16.png"></p>
+<h5 id="在活动相关页面申请加入又拍云开发者联盟"><a href="#在活动相关页面申请加入又拍云开发者联盟" class="headerlink" title="在活动相关页面申请加入又拍云开发者联盟"></a>在活动相关页面申请加入又拍云开发者联盟</h5><p><a href="https://www.upyun.com/league">https://www.upyun.com/league</a></p>
+<h4 id="在控制台中创建CDN加速服务"><a href="#在控制台中创建CDN加速服务" class="headerlink" title="在控制台中创建CDN加速服务"></a>在控制台中创建CDN加速服务</h4><p><img src="/posts/MyBlog/17.png"></p>
+<p>需要注意的是，源站证书校验需要关闭，否则可能后续访问的时候经常出现报错”certificate has expired”</p>
+<h3 id="在dns上设置别名解析"><a href="#在dns上设置别名解析" class="headerlink" title="在dns上设置别名解析"></a>在dns上设置别名解析</h3><p>加速服务创建好了，现在我们只需要设置以下dns解析就能开启cdn加速了</p>
+<p><img src="/posts/MyBlog/18.png"></p>
+<p><img src="/posts/MyBlog/19.png"></p>
+<p><img src="/posts/MyBlog/20.png"></p>
+<p>刚才指向yuukipix.github.io的CNAME需要更改为境外</p>
+<p>CND加速配置完成</p>
+<h3 id="优化CDN"><a href="#优化CDN" class="headerlink" title="优化CDN"></a>优化CDN</h3><p>开启HTTPS</p>
+<p><img src="/posts/MyBlog/21.png"></p>
+<p>开启性能优化</p>
+<p><img src="/posts/MyBlog/22.png"></p>
+<p><img src="/posts/MyBlog/23.png"></p>
+<p><img src="/posts/MyBlog/24.png"></p>
+]]></content>
       <categories>
         <category>记录</category>
       </categories>
@@ -301,7 +361,11 @@
   <entry>
     <title>黑群晖升级DSM6.2.3-25426</title>
     <url>/posts/%E9%BB%91%E7%BE%A4%E6%99%96%E5%8D%87%E7%BA%A7DSM6.2.3-25426/</url>
-    <content><![CDATA[<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>群晖现在是DSM 6.2.1-23824 Update 6版本，使用第三方手机软件派派助手发现控制台打不开，朋友的DSM 6.2.3-25426却正常。</p>
+    <content><![CDATA[<h1 id="翻车记录"><a href="#翻车记录" class="headerlink" title="翻车记录"></a>翻车记录</h1><p>重做引导开机后发现进不去系统，于是把所有磁盘拔出，留下一个相对来说不重要的盘</p>
+<p>将留下的盘插入电脑，使用Diskgenius删除那个硬盘的主分区（粉色的）插入NAS后开机等待回恢复</p>
+<p>等待重启后找到群晖对应IP就可以安装系统了，但是原来的系统设置可能不会保留下来，共享文件夹中的数据还在，套件的数据还在，Docker的容器也在（格的不是安装套件那个盘的话）</p>
+<p><img src="/posts/%E9%BB%91%E7%BE%A4%E6%99%96%E5%8D%87%E7%BA%A7DSM6.2.3-25426/8.png"></p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>群晖现在是DSM 6.2.1-23824 Update 6版本，使用第三方手机软件派派助手发现控制台打不开，朋友的DSM 6.2.3-25426却正常。</p>
 <p>想到以前群晖老是引导出问题开不了机（能进HappyHacking但是访问IP无反应，需要重做引导才能进系统），我决定升级系统。</p>
 <h1 id="系统简介"><a href="#系统简介" class="headerlink" title="系统简介"></a>系统简介</h1><p>DSM6.2.3 系统引导有 DS3615，DS3617，DS918+ 三种，DS918 支持 UEFI 和 Legacy 启动，支持硬解码。DS3615 和 DS3617 只支持 Legacy 启动，不支持硬解码。</p>
 <p>所以我选择的是DS918+。</p>
@@ -313,7 +377,7 @@
 <p>Win32DiskImager——写盘软件 将引导镜像写入U盘</p>
 <p>DiskGenius Pro单文件版——格式化U盘、替换文件等</p>
 <p>蓝奏云 <a href="https://wwa.lanzoui.com/b05btposd">https://wwa.lanzoui.com/b05btposd</a> 密码:3ttl</p>
-<h1 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h1><h2 id="简化步骤"><a href="#简化步骤" class="headerlink" title="简化步骤"></a>简化步骤</h2><ol>
+<h1 id="升级（适用于全新安装，如果是"><a href="#升级（适用于全新安装，如果是" class="headerlink" title="升级（适用于全新安装，如果是"></a>升级（适用于全新安装，如果是</h1><h2 id="简化步骤"><a href="#简化步骤" class="headerlink" title="简化步骤"></a>简化步骤</h2><ol>
 <li><p>U盘重做引导</p>
 </li>
 <li><p>开机后使用WEB界面上传.pat系统文件恢复系统</p>
@@ -349,9 +413,8 @@
 </li>
 <li>在WEB界面上传.pat系统文件，等待群晖恢复后自动重启<br><img src="/posts/%E9%BB%91%E7%BE%A4%E6%99%96%E5%8D%87%E7%BA%A7DSM6.2.3-25426/7.png"></li>
 </ol>
-<p>翻车，别人博客更新了引导后都是提示重新安装新系统，而我是还原，而且我点击还原系统重启后就进不去web了</p>
+<p><strong>翻车，别人博客更新了引导后都是提示重新安装新系统，而我是还原，而且我点击还原系统重启后就进不去web了</strong></p>
 <p>现在拔掉了原有的硬盘，插入了一个新硬盘，web界面可以正常安装系统了</p>
-<p><img src="/posts/%E9%BB%91%E7%BE%A4%E6%99%96%E5%8D%87%E7%BA%A7DSM6.2.3-25426/8.png"></p>
 <h2 id="升级完成"><a href="#升级完成" class="headerlink" title="升级完成"></a>升级完成</h2><p>重启开机后系统就升级成功了</p>
 <p>检查一下核显硬解或者其他容易出BUG的地方（网卡）看看有没有问题吧</p>
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://mianao.info/2021/07/18/%E9%BB%91%E7%BE%A4%E6%99%96%E5%8D%87%E7%BA%A7%E5%88%B06-2-3">《黑群晖升级到6.2.3》</a><br><a href="https://wp.gxnas.com/7407.html">《关于DSM6.23版本安装/升级的说明及img引导文件（含918硬解补丁文件）和PAT安装包下载地址》</a></p>
