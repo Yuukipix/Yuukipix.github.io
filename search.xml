@@ -96,7 +96,7 @@
 
 <p><img src="/posts/MyBlog/15.png"></p>
 <p>效果展示</p>
-<p><img src="/posts/MyBlog/Hexo\source_posts\MyBlog\16.png"></p>
+<p><img src="/posts/MyBlog/16.png"></p>
 <h5 id="在活动相关页面申请加入又拍云开发者联盟"><a href="#在活动相关页面申请加入又拍云开发者联盟" class="headerlink" title="在活动相关页面申请加入又拍云开发者联盟"></a>在活动相关页面申请加入又拍云开发者联盟</h5><p><a href="https://www.upyun.com/league">https://www.upyun.com/league</a></p>
 <h4 id="在控制台中创建CDN加速服务"><a href="#在控制台中创建CDN加速服务" class="headerlink" title="在控制台中创建CDN加速服务"></a>在控制台中创建CDN加速服务</h4><p><img src="/posts/MyBlog/17.png"></p>
 <p>需要注意的是，源站证书校验需要关闭，否则可能后续访问的时候经常出现报错”certificate has expired”</p>
@@ -426,5 +426,43 @@
         <tag>折腾</tag>
         <tag>黑群晖</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/posts/MyBlog/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h2 id="配置CentOS7网络"><a href="#配置CentOS7网络" class="headerlink" title="配置CentOS7网络"></a>配置CentOS7网络</h2><p>配置静态IP</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /etc/sysconfig/network-scripts/</span><br></pre></td></tr></table></figure>
+
+<p>找到对应的网卡配置文件（本例中是ifcfg-ens192）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/sysconfig/network-scripts/ifcfg-ens192</span><br></pre></td></tr></table></figure>
+
+<p>主要修改的地方</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">BOOTPROTO=static</span><br><span class="line">IPADDR=172.16.3.228</span><br><span class="line">GATEWAY=172.16.3.254</span><br><span class="line">NETMASK=255.255.255.0</span><br><span class="line">DNS1=172.13.1.48</span><br><span class="line">DNS2=172.13.1.49</span><br></pre></td></tr></table></figure>
+
+<p>修改好的配置如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">TYPE=Ethernet</span><br><span class="line">PROXY_METHOD=none</span><br><span class="line">BROWSER_ONLY=no</span><br><span class="line">BOOTPROTO=static</span><br><span class="line">DEFROUTE=yes</span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=yes</span><br><span class="line">IPV6_AUTOCONF=yes</span><br><span class="line">IPV6_DEFROUTE=yes</span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">IPV6_ADDR_GEN_MODE=stable-privacy</span><br><span class="line">NAME=ens192</span><br><span class="line">UUID=eec0229a-4527-4f7b-a837-1abf1e819048</span><br><span class="line">DEVICE=ens192</span><br><span class="line">ONBOOT=yes</span><br><span class="line">IPADDR=172.16.3.228</span><br><span class="line">GATEWAY=172.16.3.254</span><br><span class="line">NETMASK=255.255.255.0</span><br><span class="line">PREFIX=24</span><br><span class="line">DNS1=172.13.1.48</span><br><span class="line">DNS2=172.13.1.49</span><br></pre></td></tr></table></figure>
+
+<p>配置DNS</p>
+<p>如果刚才配置了DNS如果没有生效，测试了如下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmcli con mod ens192 ipv4.dns  &quot;172.13.1.48 172.13.1.49&quot;</span><br><span class="line">nmcli con up ens192	//使dns配置生效</span><br></pre></td></tr></table></figure>
+
+<h2 id="更换yum源为阿里云源"><a href="#更换yum源为阿里云源" class="headerlink" title="更换yum源为阿里云源"></a>更换yum源为阿里云源</h2><p>备份原yum源配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak</span><br></pre></td></tr></table></figure>
+
+<p>下载阿里云yum源配置文件（CentOS7）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br></pre></td></tr></table></figure>
+
+<h2 id="升级yum软件包"><a href="#升级yum软件包" class="headerlink" title="升级yum软件包"></a>升级yum软件包</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum makecache	//清除yum缓存</span><br><span class="line">yum check-update	//检查所有软件包更新</span><br><span class="line">yum update	//更新所有软件包</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改系统主机名"><a href="#修改系统主机名" class="headerlink" title="修改系统主机名"></a>修改系统主机名</h2><p>使用如下命令查看主机名（三选一）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hostname</span><br><span class="line">uname -n</span><br><span class="line">cat /proc/sys/kernel/hostname</span><br></pre></td></tr></table></figure>
+
+<p>修改主机名</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/hostname</span><br></pre></td></tr></table></figure>
+
+<p>修改完后保存文件重启即可</p>
+<h2 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">passwd root</span><br></pre></td></tr></table></figure>
+
+]]></content>
   </entry>
 </search>

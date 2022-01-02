@@ -1,0 +1,63 @@
+<h2 id="配置CentOS7网络"><a href="#配置CentOS7网络" class="headerlink" title="配置CentOS7网络"></a>配置CentOS7网络</h2><p>配置静态IP</p>
+<pre><code>cd /etc/sysconfig/network-scripts/
+</code></pre>
+<p>找到对应的网卡配置文件（本例中是ifcfg-ens192）</p>
+<pre><code>vi /etc/sysconfig/network-scripts/ifcfg-ens192
+</code></pre>
+<p>主要修改的地方</p>
+<pre><code>BOOTPROTO=static
+IPADDR=172.16.3.228
+GATEWAY=172.16.3.254
+NETMASK=255.255.255.0
+DNS1=172.13.1.48
+DNS2=172.13.1.49
+</code></pre>
+<p>修改好的配置如下</p>
+<pre><code>TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens192
+UUID=eec0229a-4527-4f7b-a837-1abf1e819048
+DEVICE=ens192
+ONBOOT=yes
+IPADDR=172.16.3.228
+GATEWAY=172.16.3.254
+NETMASK=255.255.255.0
+PREFIX=24
+DNS1=172.13.1.48
+DNS2=172.13.1.49
+</code></pre>
+<p>配置DNS</p>
+<p>如果刚才配置了DNS如果没有生效，测试了如下命令</p>
+<pre><code>nmcli con mod ens192 ipv4.dns  &quot;172.13.1.48 172.13.1.49&quot;
+nmcli con up ens192    //使dns配置生效
+</code></pre>
+<h2 id="更换yum源为阿里云源"><a href="#更换yum源为阿里云源" class="headerlink" title="更换yum源为阿里云源"></a>更换yum源为阿里云源</h2><p>备份原yum源配置文件</p>
+<pre><code>mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+</code></pre>
+<p>下载阿里云yum源配置文件（CentOS7）</p>
+<pre><code>wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+</code></pre>
+<h2 id="升级yum软件包"><a href="#升级yum软件包" class="headerlink" title="升级yum软件包"></a>升级yum软件包</h2><pre><code>yum makecache    //清除yum缓存
+yum check-update    //检查所有软件包更新
+yum update    //更新所有软件包
+</code></pre>
+<h2 id="修改系统主机名"><a href="#修改系统主机名" class="headerlink" title="修改系统主机名"></a>修改系统主机名</h2><p>使用如下命令查看主机名（三选一）</p>
+<pre><code>hostname
+uname -n
+cat /proc/sys/kernel/hostname
+</code></pre>
+<p>修改主机名</p>
+<pre><code>vi /etc/hostname
+</code></pre>
+<p>修改完后保存文件重启即可</p>
+<h2 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h2><pre><code>passwd root
+</code></pre>
