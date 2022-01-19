@@ -116,114 +116,6 @@
       </tags>
   </entry>
   <entry>
-    <title>socks5&amp;http_proxy代理</title>
-    <url>/posts/socks5&amp;http_proxy/</url>
-    <content><![CDATA[<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://zgao.top/%E5%A5%87%E5%AE%89%E4%BF%A1%E5%AE%9E%E4%B9%A0%E4%BA%94-socks5%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/">《奇安信实习(五)-Socks5协议抓包分析》</a><br><a href="https://reezon.github.io/2018/05/23/%E5%85%B3%E4%BA%8Ess(%E9%85%B8%E9%85%B8)%E5%92%8Cssr(%E9%85%B8%E9%85%B8%E4%B9%B3)%EF%BC%8C%E8%BF%98%E6%9C%89vpn%E5%92%8Csocks5/">《关于ss(酸酸)和ssr(酸酸乳)，还有vpn和socks5》</a></p>
-<h2 id="Socks5-代理"><a href="#Socks5-代理" class="headerlink" title="Socks5 代理"></a>Socks5 代理</h2><ul>
-<li>socks(socket security)是一种网络传输协议，它工作在OSI七层模型中的第五层/会话层。</li>
-<li>socks5比socks4协议多了验证、IPv6、UDP支持。</li>
-<li>socks5代理是把你的网络数据由代理服务器转发到目的地，这个过程中你是没有一条专用通道的，只是数据包的发出，然后被代理服务器收到，然后代理服务器再进行转发，整个过程并没有额外的处理。</li>
-<li>socks5 协议并不负责代理服务器的数据传输环节，此协议只是在Client/Server两端真实交互之间，建立起一条从客户端到代理服务器的授信连接。</li>
-</ul>
-<h2 id="Socks5和VPN的区别"><a href="#Socks5和VPN的区别" class="headerlink" title="Socks5和VPN的区别"></a>Socks5和VPN的区别</h2><ul>
-<li>vpn是建立一条静态路由0.0.0.0/0，所有的应用都走这条路出去。</li>
-<li>vpn会给你分配一个内网地址（例如L2TP、PPTP），socks5不会。</li>
-<li>vpn不需要配置端口号，socks5需要。</li>
-</ul>
-<h2 id="Socks5的交互方式"><a href="#Socks5的交互方式" class="headerlink" title="Socks5的交互方式"></a>Socks5的交互方式</h2><p>socks5  是一个Client/Server交互的协议，交互大概分为这么几步：</p>
-<ol>
-<li>客户端发送认证协商</li>
-<li>代理服务器就认证协商进行回复（如拒绝则本次会话结束）<ol>
-<li>如需GSSAPI或用户名/密码认证，客户端发送认证信息</li>
-<li>代理服务器就对应项进行鉴权，并进行回复或拒绝</li>
-</ol>
-</li>
-<li>客户端发送希望连接的目标信息</li>
-<li>代理服务器就连接信息进行确认或拒绝</li>
-<li>【非协议内容】：代理服务器连接目标并 pipe 到客户端Socks5协议并不负责代理服务器的数据传输环节，此协议只是在C/S两端真实交互之间，建立起一条从客户端到代理服务器的授信连接</li>
-</ol>
-<h2 id="HTTP-代理"><a href="#HTTP-代理" class="headerlink" title="HTTP 代理"></a>HTTP 代理</h2><p>HTTP代理工作在OSI七层模型中的第七层/应用层。HTTP代理客户机的HTTP(S)访问，主要代理浏览器访问网页。</p>
-<h2 id="socks5和HTTP代理的对比"><a href="#socks5和HTTP代理的对比" class="headerlink" title="socks5和HTTP代理的对比"></a>socks5和HTTP代理的对比</h2><ul>
-<li>socks5工作在比HTTP代理更低的层次</li>
-<li>socks5使用握手协议来通知代理软件其客户端试图进行的socks连接，然后尽可能透明地进行操作（不对请求或响应进行修改），而HTTP代理可能会解释和重写报头</li>
-<li>socks5代理支持UDP协议，而HTTP代理不能</li>
-</ul>
-<h2 id="网络示意图"><a href="#网络示意图" class="headerlink" title="网络示意图"></a>网络示意图</h2><p><img src="socks5&http_proxy/1.png"></p>
-<h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>搭建socks5和HTTP代理（Clash Docker版）</p>
-<p>代理：Socks5代理（IP：172.16.7.233:7891）HTTP代理（IP：172.16.7.233:7890）<br>目标网站：<a href="http://172.16.3.9/backend/getIP.php">http://172.16.3.9/backend/getIP.php</a>（可返回访问者IP）</p>
-<p>软件环境：Win10系统电脑、SSTAP、WireShark、CURL<br>​</p>
-<p>流量路径：本机浏览器–&gt;HTTP代理（如果有）–&gt;SSTAP虚拟网卡–&gt;物理网卡–&gt;socks代理服务器–&gt;HTTP代理服务器（如果有）<br>​</p>
-<p>流量分析：使用WireShark在<strong>物理网卡</strong>接口上抓取流量进行分析<br>注意：默认情况下，只有socks代理的端口设置为1080时，wireshark才能识别为socks协议的流量。</p>
-<p>Q：为什么选择SSATP作为代理客户端软件？<br>A：因为SSTAP使用的代理模式是利用虚拟网卡技术在网络层实现的代理工具，所有流量都会被转到虚拟网卡上，这样方便分析所有流量。<br>​</p>
-<p>Q：为什么使用Clash作为代理服务端？<br>A：因为Clash自带HTTP和Socks5代理，简单配置一下就能用。</p>
-<h2 id="流量分析"><a href="#流量分析" class="headerlink" title="流量分析"></a>流量分析</h2><p>Socks5代理可以设置密码认证，但是认证时客户端发给服务端的账号密码走TCP协议进行明文传输。</p>
-<h3 id="无Socks5代理-无HTTP代理"><a href="#无Socks5代理-无HTTP代理" class="headerlink" title="无Socks5代理 无HTTP代理"></a>无Socks5代理 无HTTP代理</h3><p><img src="socks5&http_proxy/2.png"><br>此时目标网站返回的IP为我的真实IP。</p>
-<h3 id="开启Socks5代理-无HTTP代理"><a href="#开启Socks5代理-无HTTP代理" class="headerlink" title="开启Socks5代理 无HTTP代理"></a>开启Socks5代理 无HTTP代理</h3><p>curl设置socks5代理方式</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl &lt;要访问的地址&gt; --socks5 &lt;host[:port]&gt; --proxy-user &lt;user:password&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="socks5&http_proxy/3.png"></p>
-<p><img src="socks5&http_proxy/4.png"></p>
-<p>可以看到目标网站返回的IP是我Socks代理的IP，但是我抓到的包中可以看到我的认证账号密码是以明文传输的。<br>密码只由socks服务端用来鉴定客户端是否有权连接，并不用密码对传输的信息进行加密。<br>在TCP三次握手后，建立socks连接，有着极为明显的流量特征（主要体现在TCP报文中的字节流中)。</p>
-<h3 id="开启HTTP代理无socks5代理"><a href="#开启HTTP代理无socks5代理" class="headerlink" title="开启HTTP代理无socks5代理"></a>开启HTTP代理无socks5代理</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl &lt;要访问的地址&gt; -x &lt;host[:port]&gt; --proxy-user &lt;user:password&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="socks5&http_proxy/5.png"></p>
-<p>仔细看报文，使用HTTP代理时发送的HTTP报文（上图序号4的数据包)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET http://172.16.3.9/backend/getIP.php</span><br></pre></td></tr></table></figure>
-
-<p>而使用socks代理时，发出的HTTP报文是</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /backend/getIP.php</span><br></pre></td></tr></table></figure>
-
-<p>除此之外，使用HTTP代理时，如果设置了认证，那么在发出HTTP报文的时候会有一个专门的字段Proxy-Authorization来发送账号密码。<br><img src="socks5&http_proxy/6.png"></p>
-<h3 id="开启HTTP代理并开启Socks5代理"><a href="#开启HTTP代理并开启Socks5代理" class="headerlink" title="开启HTTP代理并开启Socks5代理"></a>开启HTTP代理并开启Socks5代理</h3><p>此时开启SSTAP代理本机所有流量到socks代理服务器<br><img src="socks5&http_proxy/7.png"><br>CURL设置HTTP代理<br>WireShark开启抓包<br><img src="socks5&http_proxy/8.png"><br>虽然返回结果是我的代理服务器的IP（我的HTTP和socks代理的IP地址一样），但是实际上流量是走HTTP代理过了一遍。如果HTTP和SOCKS代理为不同IP，则会返回HTTP代理的IP。<br><img src="socks5&http_proxy/9.png"><br>上图物理网卡出口抓到的HTTP报文，和上面的仅使用HTTP代理方式发出的报文一样。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Socks是个很实用的代理协议，但是在连接建立时、传输流量过程中有着极为明显的流量特征。<br>流量加密、反检测、免杀：</p>
-<ul>
-<li>Socks5+HTTP代理并不会让本来明文传输的浏览加密，但是可以改变请求的IP，服务器看到访问者的IP就是你的代理代理服务器的IP。</li>
-<li>如果流量本身没有加密，实战中流控设备很容易识别到客户端连接成功的流量规则。</li>
-<li>如果想要加密Socks5的流量，则需要安装魔改版Socks服务端和客户端，比如著名的SS/SSR就是用Socks5来实现的，Cobalt Strike也有相关插件对流量进行加密。</li>
-</ul>
-<p>可代理的流量：</p>
-<ul>
-<li>因为HTTP代理工作在应用层，仅能代理HTTP/HTTPS流量，故不能代理SSH或远程桌面等流量，</li>
-<li>Socks5则可以代理SSH和远程桌面，但是不走TCP/UDP协议的流量（如ICMP、ARP等）则不能代理</li>
-</ul>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>折腾</tag>
-        <tag>VPN</tag>
-        <tag>隧道</tag>
-        <tag>网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>群晖配置阿里云Docker镜像加速服务</title>
-    <url>/posts/synology-docker-mirror-acceleration/</url>
-    <content><![CDATA[<h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><p>环境DSM 6.2.3<br>Docker套件版本：18</p>
-<h1 id="群晖Web界面设置"><a href="#群晖Web界面设置" class="headerlink" title="群晖Web界面设置"></a>群晖Web界面设置</h1><p>先找到阿里云镜像加速服务，开通<br><a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a><br><img src="/posts/synology-docker-mirror-acceleration/1.png"></p>
-<p>可在Docker套件-注册表中进行如下设置进行加速<br><img src="/posts/synology-docker-mirror-acceleration/2.png"></p>
-<h1 id="SSH连接群晖修改配置文件（可选）"><a href="#SSH连接群晖修改配置文件（可选）" class="headerlink" title="SSH连接群晖修改配置文件（可选）"></a>SSH连接群晖修改配置文件（可选）</h1><p>也可以使用ssh连接到群晖，编辑以下文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/etc/dockerd.json</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/synology-docker-mirror-acceleration/3.png"><br>保险起见，再修改一下这两个配置文件。这两个文件互相映射，改哪个都一样。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/target/config/dockerd.json</span><br><span class="line">vi /volume1/@appstore/Docker/config/dockerd.json	//volume1是套件保存的位置，根据自己实际情况填写</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/synology-docker-mirror-acceleration/4.png"><br>测试安装一下镜像，速度不错。<br>不过下载Jellyfin依旧可能报错，不知道为什么。</p>
-<h1 id="解决Jellyfin多次下载失败"><a href="#解决Jellyfin多次下载失败" class="headerlink" title="解决Jellyfin多次下载失败"></a>解决Jellyfin多次下载失败</h1><p>如果多次下载Jellyfin还是失败，试试直接ssh连上群晖</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull jellyfin/jellyfin</span><br></pre></td></tr></table></figure>
-
-<p>这下就不会失败了，等待一会下载好后会在映像中显示出来<br><img src="/posts/synology-docker-mirror-acceleration/5.png"></p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>折腾</tag>
-        <tag>黑群晖</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>静态托管Blog:Hexo+Github Pages+个人域名+CDN</title>
     <url>/posts/myblog/</url>
     <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>为什么要使用这套方案？<br>使用这套方案成本更低，无需担心服务器被攻击，无需维护服务器，也不用担心服务器到期。</p>
@@ -342,6 +234,114 @@
       <tags>
         <tag>折腾</tag>
         <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>socks5&amp;http_proxy代理</title>
+    <url>/posts/socks5&amp;http_proxy/</url>
+    <content><![CDATA[<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://zgao.top/%E5%A5%87%E5%AE%89%E4%BF%A1%E5%AE%9E%E4%B9%A0%E4%BA%94-socks5%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/">《奇安信实习(五)-Socks5协议抓包分析》</a><br><a href="https://reezon.github.io/2018/05/23/%E5%85%B3%E4%BA%8Ess(%E9%85%B8%E9%85%B8)%E5%92%8Cssr(%E9%85%B8%E9%85%B8%E4%B9%B3)%EF%BC%8C%E8%BF%98%E6%9C%89vpn%E5%92%8Csocks5/">《关于ss(酸酸)和ssr(酸酸乳)，还有vpn和socks5》</a></p>
+<h2 id="Socks5-代理"><a href="#Socks5-代理" class="headerlink" title="Socks5 代理"></a>Socks5 代理</h2><ul>
+<li>socks(socket security)是一种网络传输协议，它工作在OSI七层模型中的第五层/会话层。</li>
+<li>socks5比socks4协议多了验证、IPv6、UDP支持。</li>
+<li>socks5代理是把你的网络数据由代理服务器转发到目的地，这个过程中你是没有一条专用通道的，只是数据包的发出，然后被代理服务器收到，然后代理服务器再进行转发，整个过程并没有额外的处理。</li>
+<li>socks5 协议并不负责代理服务器的数据传输环节，此协议只是在Client/Server两端真实交互之间，建立起一条从客户端到代理服务器的授信连接。</li>
+</ul>
+<h2 id="Socks5和VPN的区别"><a href="#Socks5和VPN的区别" class="headerlink" title="Socks5和VPN的区别"></a>Socks5和VPN的区别</h2><ul>
+<li>vpn是建立一条静态路由0.0.0.0/0，所有的应用都走这条路出去。</li>
+<li>vpn会给你分配一个内网地址（例如L2TP、PPTP），socks5不会。</li>
+<li>vpn不需要配置端口号，socks5需要。</li>
+</ul>
+<h2 id="Socks5的交互方式"><a href="#Socks5的交互方式" class="headerlink" title="Socks5的交互方式"></a>Socks5的交互方式</h2><p>socks5  是一个Client/Server交互的协议，交互大概分为这么几步：</p>
+<ol>
+<li>客户端发送认证协商</li>
+<li>代理服务器就认证协商进行回复（如拒绝则本次会话结束）<ol>
+<li>如需GSSAPI或用户名/密码认证，客户端发送认证信息</li>
+<li>代理服务器就对应项进行鉴权，并进行回复或拒绝</li>
+</ol>
+</li>
+<li>客户端发送希望连接的目标信息</li>
+<li>代理服务器就连接信息进行确认或拒绝</li>
+<li>【非协议内容】：代理服务器连接目标并 pipe 到客户端Socks5协议并不负责代理服务器的数据传输环节，此协议只是在C/S两端真实交互之间，建立起一条从客户端到代理服务器的授信连接</li>
+</ol>
+<h2 id="HTTP-代理"><a href="#HTTP-代理" class="headerlink" title="HTTP 代理"></a>HTTP 代理</h2><p>HTTP代理工作在OSI七层模型中的第七层/应用层。HTTP代理客户机的HTTP(S)访问，主要代理浏览器访问网页。</p>
+<h2 id="socks5和HTTP代理的对比"><a href="#socks5和HTTP代理的对比" class="headerlink" title="socks5和HTTP代理的对比"></a>socks5和HTTP代理的对比</h2><ul>
+<li>socks5工作在比HTTP代理更低的层次</li>
+<li>socks5使用握手协议来通知代理软件其客户端试图进行的socks连接，然后尽可能透明地进行操作（不对请求或响应进行修改），而HTTP代理可能会解释和重写报头</li>
+<li>socks5代理支持UDP协议，而HTTP代理不能</li>
+</ul>
+<h2 id="网络示意图"><a href="#网络示意图" class="headerlink" title="网络示意图"></a>网络示意图</h2><p><img src="socks5&http_proxy/1.png"></p>
+<h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>搭建socks5和HTTP代理（Clash Docker版）</p>
+<p>代理：Socks5代理（IP：172.16.7.233:7891）HTTP代理（IP：172.16.7.233:7890）<br>目标网站：<a href="http://172.16.3.9/backend/getIP.php">http://172.16.3.9/backend/getIP.php</a>（可返回访问者IP）</p>
+<p>软件环境：Win10系统电脑、SSTAP、WireShark、CURL<br>​</p>
+<p>流量路径：本机浏览器–&gt;HTTP代理（如果有）–&gt;SSTAP虚拟网卡–&gt;物理网卡–&gt;socks代理服务器–&gt;HTTP代理服务器（如果有）<br>​</p>
+<p>流量分析：使用WireShark在<strong>物理网卡</strong>接口上抓取流量进行分析<br>注意：默认情况下，只有socks代理的端口设置为1080时，wireshark才能识别为socks协议的流量。</p>
+<p>Q：为什么选择SSATP作为代理客户端软件？<br>A：因为SSTAP使用的代理模式是利用虚拟网卡技术在网络层实现的代理工具，所有流量都会被转到虚拟网卡上，这样方便分析所有流量。<br>​</p>
+<p>Q：为什么使用Clash作为代理服务端？<br>A：因为Clash自带HTTP和Socks5代理，简单配置一下就能用。</p>
+<h2 id="流量分析"><a href="#流量分析" class="headerlink" title="流量分析"></a>流量分析</h2><p>Socks5代理可以设置密码认证，但是认证时客户端发给服务端的账号密码走TCP协议进行明文传输。</p>
+<h3 id="无Socks5代理-无HTTP代理"><a href="#无Socks5代理-无HTTP代理" class="headerlink" title="无Socks5代理 无HTTP代理"></a>无Socks5代理 无HTTP代理</h3><p><img src="socks5&http_proxy/2.png"><br>此时目标网站返回的IP为我的真实IP。</p>
+<h3 id="开启Socks5代理-无HTTP代理"><a href="#开启Socks5代理-无HTTP代理" class="headerlink" title="开启Socks5代理 无HTTP代理"></a>开启Socks5代理 无HTTP代理</h3><p>curl设置socks5代理方式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl &lt;要访问的地址&gt; --socks5 &lt;host[:port]&gt; --proxy-user &lt;user:password&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="socks5&http_proxy/3.png"></p>
+<p><img src="socks5&http_proxy/4.png"></p>
+<p>可以看到目标网站返回的IP是我Socks代理的IP，但是我抓到的包中可以看到我的认证账号密码是以明文传输的。<br>密码只由socks服务端用来鉴定客户端是否有权连接，并不用密码对传输的信息进行加密。<br>在TCP三次握手后，建立socks连接，有着极为明显的流量特征（主要体现在TCP报文中的字节流中)。</p>
+<h3 id="开启HTTP代理无socks5代理"><a href="#开启HTTP代理无socks5代理" class="headerlink" title="开启HTTP代理无socks5代理"></a>开启HTTP代理无socks5代理</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl &lt;要访问的地址&gt; -x &lt;host[:port]&gt; --proxy-user &lt;user:password&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="socks5&http_proxy/5.png"></p>
+<p>仔细看报文，使用HTTP代理时发送的HTTP报文（上图序号4的数据包)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET http://172.16.3.9/backend/getIP.php</span><br></pre></td></tr></table></figure>
+
+<p>而使用socks代理时，发出的HTTP报文是</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /backend/getIP.php</span><br></pre></td></tr></table></figure>
+
+<p>除此之外，使用HTTP代理时，如果设置了认证，那么在发出HTTP报文的时候会有一个专门的字段Proxy-Authorization来发送账号密码。<br><img src="socks5&http_proxy/6.png"></p>
+<h3 id="开启HTTP代理并开启Socks5代理"><a href="#开启HTTP代理并开启Socks5代理" class="headerlink" title="开启HTTP代理并开启Socks5代理"></a>开启HTTP代理并开启Socks5代理</h3><p>此时开启SSTAP代理本机所有流量到socks代理服务器<br><img src="socks5&http_proxy/7.png"><br>CURL设置HTTP代理<br>WireShark开启抓包<br><img src="socks5&http_proxy/8.png"><br>虽然返回结果是我的代理服务器的IP（我的HTTP和socks代理的IP地址一样），但是实际上流量是走HTTP代理过了一遍。如果HTTP和SOCKS代理为不同IP，则会返回HTTP代理的IP。<br><img src="socks5&http_proxy/9.png"><br>上图物理网卡出口抓到的HTTP报文，和上面的仅使用HTTP代理方式发出的报文一样。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Socks是个很实用的代理协议，但是在连接建立时、传输流量过程中有着极为明显的流量特征。<br>流量加密、反检测、免杀：</p>
+<ul>
+<li>Socks5+HTTP代理并不会让本来明文传输的浏览加密，但是可以改变请求的IP，服务器看到访问者的IP就是你的代理代理服务器的IP。</li>
+<li>如果流量本身没有加密，实战中流控设备很容易识别到客户端连接成功的流量规则。</li>
+<li>如果想要加密Socks5的流量，则需要安装魔改版Socks服务端和客户端，比如著名的SS/SSR就是用Socks5来实现的，Cobalt Strike也有相关插件对流量进行加密。</li>
+</ul>
+<p>可代理的流量：</p>
+<ul>
+<li>因为HTTP代理工作在应用层，仅能代理HTTP/HTTPS流量，故不能代理SSH或远程桌面等流量，</li>
+<li>Socks5则可以代理SSH和远程桌面，但是不走TCP/UDP协议的流量（如ICMP、ARP等）则不能代理</li>
+</ul>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>VPN</tag>
+        <tag>隧道</tag>
+        <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>群晖配置阿里云Docker镜像加速服务</title>
+    <url>/posts/synology-docker-mirror-acceleration/</url>
+    <content><![CDATA[<h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><p>环境DSM 6.2.3<br>Docker套件版本：18</p>
+<h1 id="群晖Web界面设置"><a href="#群晖Web界面设置" class="headerlink" title="群晖Web界面设置"></a>群晖Web界面设置</h1><p>先找到阿里云镜像加速服务，开通<br><a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a><br><img src="/posts/synology-docker-mirror-acceleration/1.png"></p>
+<p>可在Docker套件-注册表中进行如下设置进行加速<br><img src="/posts/synology-docker-mirror-acceleration/2.png"></p>
+<h1 id="SSH连接群晖修改配置文件（可选）"><a href="#SSH连接群晖修改配置文件（可选）" class="headerlink" title="SSH连接群晖修改配置文件（可选）"></a>SSH连接群晖修改配置文件（可选）</h1><p>也可以使用ssh连接到群晖，编辑以下文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/etc/dockerd.json</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/synology-docker-mirror-acceleration/3.png"><br>保险起见，再修改一下这两个配置文件。这两个文件互相映射，改哪个都一样。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/packages/Docker/target/config/dockerd.json</span><br><span class="line">vi /volume1/@appstore/Docker/config/dockerd.json	//volume1是套件保存的位置，根据自己实际情况填写</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/synology-docker-mirror-acceleration/4.png"><br>测试安装一下镜像，速度不错。<br>不过下载Jellyfin依旧可能报错，不知道为什么。</p>
+<h1 id="解决Jellyfin多次下载失败"><a href="#解决Jellyfin多次下载失败" class="headerlink" title="解决Jellyfin多次下载失败"></a>解决Jellyfin多次下载失败</h1><p>如果多次下载Jellyfin还是失败，试试直接ssh连上群晖</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull jellyfin/jellyfin</span><br></pre></td></tr></table></figure>
+
+<p>这下就不会失败了，等待一会下载好后会在映像中显示出来<br><img src="/posts/synology-docker-mirror-acceleration/5.png"></p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>黑群晖</tag>
       </tags>
   </entry>
   <entry>
