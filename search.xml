@@ -1,46 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>解决公网云服务器青龙面板被爆破登录</title>
-    <url>/posts/docker-qinglong/</url>
-    <content><![CDATA[<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>最近经常收到青龙面板的登陆失败提示，而且经常就是几十条推送过来，于是就想研究一下如何配置一下nginx来阻止盗cookie的嗨客通过ip加端口号的形式访问我的青龙面板。</p>
-<p>也就是说青龙面板只能通过我绑定的域名+端口号访问，这样就大大减少了被脚本爆破的风险</p>
-<p><strong>注意！本文中所有命令均在容器中执行！！！</strong></p>
-<h3 id="配置青龙面板容器中的nginx配置文件"><a href="#配置青龙面板容器中的nginx配置文件" class="headerlink" title="配置青龙面板容器中的nginx配置文件"></a>配置青龙面板容器中的nginx配置文件</h3><p>我使用了portainer进行容器管理，通过网页进入青龙面板容器的console</p>
-<p><img src="/posts/docker-qinglong/1.png"></p>
-<p><img src="/posts/docker-qinglong/2.png"></p>
-<p>使用vim编辑nginx的配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/nginx/conf.d/front.conf</span><br></pre></td></tr></table></figure>
-
-<p>需要添加的地方，加上这个配置后使用ip+端口号访问就会提示404</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 5700 default_server;</span><br><span class="line">    server_name _;</span><br><span class="line">    return 404;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/docker-qinglong/3.png"></p>
-<h3 id="验证配置文件并重启nginx"><a href="#验证配置文件并重启nginx" class="headerlink" title="验证配置文件并重启nginx"></a>验证配置文件并重启nginx</h3><h4 id="验证配置文件"><a href="#验证配置文件" class="headerlink" title="验证配置文件"></a>验证配置文件</h4><p>在容器的console中执行命令，验证配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
-
-<p>如果出现successful则表示修改的配置文件没问题</p>
-<p><img src="/posts/docker-qinglong/4.png"></p>
-<h4 id="重启nginx"><a href="#重启nginx" class="headerlink" title="重启nginx"></a>重启nginx</h4><p>在容器的console中执行命令，重启nginx</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
-
-<h3 id="测试效果"><a href="#测试效果" class="headerlink" title="测试效果"></a>测试效果</h3><p>使用ip+端口号访问提示404</p>
-<p><img src="/posts/docker-qinglong/5.png"></p>
-<p>使用域名+端口号访问则正常</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>虽然这样可以防止5700端口被爆破，但是这样配置起来也挺麻烦，配置完后重启容器配置还会清空，如果能直接修改青龙面板的映射端口是更优解。</p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>折腾</tag>
-        <tag>Docker</tag>
-        <tag>云服务器</tag>
-        <tag>薅羊毛</tag>
-        <tag>青龙面板</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用Wireguard打通NAT实现LAN-to-LAN</title>
     <url>/posts/Wireguard-LANtoLAN/</url>
     <content><![CDATA[<p><img src="/posts/Wireguard-LANtoLAN/1.png"><br>本次实验是使用Wireguard打通NAT实现公网腾讯云和教务网的互访。<br>应用场景：</p>
@@ -120,7 +80,10 @@
     <url>/posts/hackinto_synology/</url>
     <content><![CDATA[<h1 id="系统简介"><a href="#系统简介" class="headerlink" title="系统简介"></a>系统简介</h1><p>DSM6.2.3 系统引导有 DS3615，DS3617，DS918+ 三种，DS918 支持 UEFI 和 Legacy 启动，支持硬解码。DS3615 和 DS3617 只支持 Legacy 启动，不支持硬解码。</p>
 <p>本例中选择的是DS918+。</p>
-<h1 id="需要用到的文件"><a href="#需要用到的文件" class="headerlink" title="需要用到的文件"></a>需要用到的文件</h1><h2 id="引导文件"><a href="#引导文件" class="headerlink" title="引导文件"></a>引导文件</h2><p>.pat系统文件</p>
+<h1 id="需要用到的文件"><a href="#需要用到的文件" class="headerlink" title="需要用到的文件"></a>需要用到的文件</h1><h2 id="系统文件"><a href="#系统文件" class="headerlink" title="系统文件"></a>系统文件</h2><ol>
+<li>DS918+_6.23-25426-1.04b.img 引导文件，用于制作U盘引导</li>
+<li>DS918+_6.23-25426.pat 系统文件，用于在WEB界面安装系统</li>
+</ol>
 <h2 id="会使用到的工具"><a href="#会使用到的工具" class="headerlink" title="会使用到的工具"></a>会使用到的工具</h2><p>ChipGenius——查看U盘VID PID</p>
 <p>Win32DiskImager——写盘软件 将引导镜像写入U盘</p>
 <p>DiskGenius Pro单文件版——格式化U盘、替换文件等</p>
@@ -166,6 +129,46 @@
       <tags>
         <tag>折腾</tag>
         <tag>黑群晖</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决公网云服务器青龙面板被爆破登录</title>
+    <url>/posts/docker-qinglong/</url>
+    <content><![CDATA[<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>最近经常收到青龙面板的登陆失败提示，而且经常就是几十条推送过来，于是就想研究一下如何配置一下nginx来阻止盗cookie的嗨客通过ip加端口号的形式访问我的青龙面板。</p>
+<p>也就是说青龙面板只能通过我绑定的域名+端口号访问，这样就大大减少了被脚本爆破的风险</p>
+<p><strong>注意！本文中所有命令均在容器中执行！！！</strong></p>
+<h3 id="配置青龙面板容器中的nginx配置文件"><a href="#配置青龙面板容器中的nginx配置文件" class="headerlink" title="配置青龙面板容器中的nginx配置文件"></a>配置青龙面板容器中的nginx配置文件</h3><p>我使用了portainer进行容器管理，通过网页进入青龙面板容器的console</p>
+<p><img src="/posts/docker-qinglong/1.png"></p>
+<p><img src="/posts/docker-qinglong/2.png"></p>
+<p>使用vim编辑nginx的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/nginx/conf.d/front.conf</span><br></pre></td></tr></table></figure>
+
+<p>需要添加的地方，加上这个配置后使用ip+端口号访问就会提示404</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 5700 default_server;</span><br><span class="line">    server_name _;</span><br><span class="line">    return 404;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/docker-qinglong/3.png"></p>
+<h3 id="验证配置文件并重启nginx"><a href="#验证配置文件并重启nginx" class="headerlink" title="验证配置文件并重启nginx"></a>验证配置文件并重启nginx</h3><h4 id="验证配置文件"><a href="#验证配置文件" class="headerlink" title="验证配置文件"></a>验证配置文件</h4><p>在容器的console中执行命令，验证配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>如果出现successful则表示修改的配置文件没问题</p>
+<p><img src="/posts/docker-qinglong/4.png"></p>
+<h4 id="重启nginx"><a href="#重启nginx" class="headerlink" title="重启nginx"></a>重启nginx</h4><p>在容器的console中执行命令，重启nginx</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试效果"><a href="#测试效果" class="headerlink" title="测试效果"></a>测试效果</h3><p>使用ip+端口号访问提示404</p>
+<p><img src="/posts/docker-qinglong/5.png"></p>
+<p>使用域名+端口号访问则正常</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>虽然这样可以防止5700端口被爆破，但是这样配置起来也挺麻烦，配置完后重启容器配置还会清空，如果能直接修改青龙面板的映射端口是更优解。</p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>Docker</tag>
+        <tag>云服务器</tag>
+        <tag>薅羊毛</tag>
+        <tag>青龙面板</tag>
       </tags>
   </entry>
   <entry>
