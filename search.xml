@@ -76,6 +76,46 @@
       </tags>
   </entry>
   <entry>
+    <title>解决公网云服务器青龙面板被爆破登录</title>
+    <url>/posts/docker-qinglong/</url>
+    <content><![CDATA[<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>最近经常收到青龙面板的登陆失败提示，而且经常就是几十条推送过来，于是就想研究一下如何配置一下nginx来阻止盗cookie的嗨客通过ip加端口号的形式访问我的青龙面板。</p>
+<p>也就是说青龙面板只能通过我绑定的域名+端口号访问，这样就大大减少了被脚本爆破的风险</p>
+<p><strong>注意！本文中所有命令均在容器中执行！！！</strong></p>
+<h3 id="配置青龙面板容器中的nginx配置文件"><a href="#配置青龙面板容器中的nginx配置文件" class="headerlink" title="配置青龙面板容器中的nginx配置文件"></a>配置青龙面板容器中的nginx配置文件</h3><p>我使用了portainer进行容器管理，通过网页进入青龙面板容器的console</p>
+<p><img src="/posts/docker-qinglong/1.png"></p>
+<p><img src="/posts/docker-qinglong/2.png"></p>
+<p>使用vim编辑nginx的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/nginx/conf.d/front.conf</span><br></pre></td></tr></table></figure>
+
+<p>需要添加的地方，加上这个配置后使用ip+端口号访问就会提示404</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 5700 default_server;</span><br><span class="line">    server_name _;</span><br><span class="line">    return 404;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/docker-qinglong/3.png"></p>
+<h3 id="验证配置文件并重启nginx"><a href="#验证配置文件并重启nginx" class="headerlink" title="验证配置文件并重启nginx"></a>验证配置文件并重启nginx</h3><h4 id="验证配置文件"><a href="#验证配置文件" class="headerlink" title="验证配置文件"></a>验证配置文件</h4><p>在容器的console中执行命令，验证配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>如果出现successful则表示修改的配置文件没问题</p>
+<p><img src="/posts/docker-qinglong/4.png"></p>
+<h4 id="重启nginx"><a href="#重启nginx" class="headerlink" title="重启nginx"></a>重启nginx</h4><p>在容器的console中执行命令，重启nginx</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试效果"><a href="#测试效果" class="headerlink" title="测试效果"></a>测试效果</h3><p>使用ip+端口号访问提示404</p>
+<p><img src="/posts/docker-qinglong/5.png"></p>
+<p>使用域名+端口号访问则正常</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>虽然这样可以防止5700端口被爆破，但是这样配置起来也挺麻烦，配置完后重启容器配置还会清空，如果能直接修改青龙面板的映射端口是更优解。</p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>Docker</tag>
+        <tag>云服务器</tag>
+        <tag>薅羊毛</tag>
+        <tag>青龙面板</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git学习笔记</title>
     <url>/posts/git-study/</url>
     <content><![CDATA[<p>跟着B站UP主 遇见狂神说 的视频学习的，跟着视频做很快就能上手。</p>
@@ -219,43 +259,106 @@
       </tags>
   </entry>
   <entry>
-    <title>解决公网云服务器青龙面板被爆破登录</title>
-    <url>/posts/docker-qinglong/</url>
-    <content><![CDATA[<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>最近经常收到青龙面板的登陆失败提示，而且经常就是几十条推送过来，于是就想研究一下如何配置一下nginx来阻止盗cookie的嗨客通过ip加端口号的形式访问我的青龙面板。</p>
-<p>也就是说青龙面板只能通过我绑定的域名+端口号访问，这样就大大减少了被脚本爆破的风险</p>
-<p><strong>注意！本文中所有命令均在容器中执行！！！</strong></p>
-<h3 id="配置青龙面板容器中的nginx配置文件"><a href="#配置青龙面板容器中的nginx配置文件" class="headerlink" title="配置青龙面板容器中的nginx配置文件"></a>配置青龙面板容器中的nginx配置文件</h3><p>我使用了portainer进行容器管理，通过网页进入青龙面板容器的console</p>
-<p><img src="/posts/docker-qinglong/1.png"></p>
-<p><img src="/posts/docker-qinglong/2.png"></p>
-<p>使用vim编辑nginx的配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/nginx/conf.d/front.conf</span><br></pre></td></tr></table></figure>
+    <title>记一次Linux云服务器异常修复</title>
+    <url>/posts/linuxserver-fix/</url>
+    <content><![CDATA[<h1 id="异常表现"><a href="#异常表现" class="headerlink" title="异常表现"></a>异常表现</h1><p>手贱恢复过一次快照后，发现docker无法启动<br>服务器中所有服务都基于docker搭建，所以恢复docker功能就能解决问题</p>
+<h1 id="尝试排查并解决问题"><a href="#尝试排查并解决问题" class="headerlink" title="尝试排查并解决问题"></a>尝试排查并解决问题</h1><p>尝试重启docker</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
 
-<p>需要添加的地方，加上这个配置后使用ip+端口号访问就会提示404</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 5700 default_server;</span><br><span class="line">    server_name _;</span><br><span class="line">    return 404;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>系统提示</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Job for docker.service failed because the control process exited with error code.</span><br><span class="line">See &quot;systemctl status docker.service&quot; and &quot;journalctl -xe&quot; for details.</span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/docker-qinglong/3.png"></p>
-<h3 id="验证配置文件并重启nginx"><a href="#验证配置文件并重启nginx" class="headerlink" title="验证配置文件并重启nginx"></a>验证配置文件并重启nginx</h3><h4 id="验证配置文件"><a href="#验证配置文件" class="headerlink" title="验证配置文件"></a>验证配置文件</h4><p>在容器的console中执行命令，验证配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+<p>根据提示输入命令查看报错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@ubuntu:~# systemctl status docker.service</span><br><span class="line"></span><br><span class="line">● docker.service - Docker Application Container Engine</span><br><span class="line">     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)</span><br><span class="line">     Active: failed (Result: exit-code) since Thu 2022-02-03 00:55:32 CST; 54s ago</span><br><span class="line">TriggeredBy: ● docker.socket</span><br><span class="line">       Docs: https://docs.docker.com</span><br><span class="line">    Process: 340597 ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock (code=exited, status=1/FAILURE)</span><br><span class="line">   Main PID: 340597 (code=exited, status=1/FAILURE)</span><br><span class="line"></span><br><span class="line">Feb 03 00:55:30 VM-8-10-ubuntu systemd[1]: docker.service: Main process exited, code=exited, status=1/FAILURE</span><br><span class="line">Feb 03 00:55:30 VM-8-10-ubuntu systemd[1]: docker.service: Failed with result &#x27;exit-code&#x27;.</span><br><span class="line">Feb 03 00:55:30 VM-8-10-ubuntu systemd[1]: Failed to start Docker Application Container Engine.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: docker.service: Scheduled restart job, restart counter is at 3.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: Stopped Docker Application Container Engine.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: docker.service: Start request repeated too quickly.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: docker.service: Failed with result &#x27;exit-code&#x27;.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: Failed to start Docker Application Container Engine.</span><br></pre></td></tr></table></figure>
 
-<p>如果出现successful则表示修改的配置文件没问题</p>
-<p><img src="/posts/docker-qinglong/4.png"></p>
-<h4 id="重启nginx"><a href="#重启nginx" class="headerlink" title="重启nginx"></a>重启nginx</h4><p>在容器的console中执行命令，重启nginx</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+<p>看不出什么有用信息，继续排查</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@:~# dockerd --debug</span><br><span class="line"></span><br><span class="line">INFO[2022-02-03T00:57:30.200810403+08:00] Starting up</span><br><span class="line">DEBU[2022-02-03T00:57:30.201601472+08:00] Listener created for HTTP on unix (/var/run/docker.sock)</span><br><span class="line">INFO[2022-02-03T00:57:30.203362974+08:00] detected 127.0.0.53 nameserver, assuming systemd-resolved, so using resolv.conf: /run/systemd/resolve/resolv.conf</span><br><span class="line">DEBU[2022-02-03T00:57:30.203766518+08:00] Golang&#x27;s threads limit set to 13590</span><br><span class="line">INFO[2022-02-03T00:57:30.204089641+08:00] parsed scheme: &quot;unix&quot;                         module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.204159640+08:00] scheme &quot;unix&quot; not registered, fallback to default scheme  module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.204224276+08:00] ccResolverWrapper: sending update to cc: &#123;[&#123;unix:///run/containerd/containerd.sock  &lt;nil&gt; 0 &lt;nil&gt;&#125;] &lt;nil&gt; &lt;nil&gt;&#125;  module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.204282462+08:00] ClientConn switching balancer to &quot;pick_first&quot;  module=grpc</span><br><span class="line">DEBU[2022-02-03T00:57:30.204722973+08:00] metrics API listening on /var/run/docker/metrics.sock</span><br><span class="line">INFO[2022-02-03T00:57:30.205634189+08:00] parsed scheme: &quot;unix&quot;                         module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.205706673+08:00] scheme &quot;unix&quot; not registered, fallback to default scheme  module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.205760302+08:00] ccResolverWrapper: sending update to cc: &#123;[&#123;unix:///run/containerd/containerd.sock  &lt;nil&gt; 0 &lt;nil&gt;&#125;] &lt;nil&gt; &lt;nil&gt;&#125;  module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.205810825+08:00] ClientConn switching balancer to &quot;pick_first&quot;  module=grpc</span><br><span class="line">DEBU[2022-02-03T00:57:30.207611945+08:00] Using default logging driver json-file</span><br><span class="line">DEBU[2022-02-03T00:57:30.207775882+08:00] [graphdriver] priority list: [btrfs zfs overlay2 fuse-overlayfs aufs overlay devicemapper vfs]</span><br><span class="line">DEBU[2022-02-03T00:57:30.222527765+08:00] processing event stream                       module=libcontainerd namespace=plugins.moby</span><br><span class="line">DEBU[2022-02-03T00:57:30.250229294+08:00] backingFs=extfs, projectQuotaSupported=false, indexOff=&quot;index=off,&quot;, userxattr=&quot;&quot;  storage-driver=overlay2</span><br><span class="line">INFO[2022-02-03T00:57:30.250411749+08:00] [graphdriver] using prior storage driver: overlay2</span><br><span class="line">DEBU[2022-02-03T00:57:30.250511448+08:00] Initialized graph driver overlay2</span><br><span class="line">DEBU[2022-02-03T00:57:30.258155291+08:00] No quota support for local volumes in /var/lib/docker/volumes: Filesystem does not support, or has not enabled quotas</span><br><span class="line">WARN[2022-02-03T00:57:30.262367778+08:00] Your kernel does not support swap memory limit</span><br><span class="line">WARN[2022-02-03T00:57:30.262458822+08:00] Your kernel does not support CPU realtime scheduler</span><br><span class="line">WARN[2022-02-03T00:57:30.262516430+08:00] Your kernel does not support cgroup blkio weight</span><br><span class="line">WARN[2022-02-03T00:57:30.262560163+08:00] Your kernel does not support cgroup blkio weight_device</span><br><span class="line">DEBU[2022-02-03T00:57:30.262722171+08:00] Max Concurrent Downloads: 3</span><br><span class="line">DEBU[2022-02-03T00:57:30.262773010+08:00] Max Concurrent Uploads: 5</span><br><span class="line">DEBU[2022-02-03T00:57:30.262811831+08:00] Max Download Attempts: 5</span><br><span class="line">INFO[2022-02-03T00:57:30.262858770+08:00] Loading containers: start.</span><br><span class="line">DEBU[2022-02-03T00:57:30.264578215+08:00] loaded container                              container=f499cddf6d78870b4b9ba422ed1d4425997aee52a06ae99a666e2d7ebcd0debe paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.264733549+08:00] processing event stream                       module=libcontainerd namespace=moby</span><br><span class="line">DEBU[2022-02-03T00:57:30.265684915+08:00] loaded container                              container=08e5723d475b2ee8754bb85f4a7f47c41c0dc602a531460c4b77e6374a76fd8d paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.267811775+08:00] loaded container                              container=257d39cf15997dc2f103caa60954d3927e232aec92a55394985557cd49e95ecc paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.268752637+08:00] loaded container                              container=31520944f8906861f7d0340a5da962ceeee0e8a86d8aff5e5f1e4e4ef090b650 paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.269713929+08:00] loaded container                              container=34a84057691d8e1f25755e95842db66bcb21b1a9572ba45e33e208fcd6ea37d5 paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.270763037+08:00] loaded container                              container=5db4bfe59ba15b1aee101f6791c492e8fc446f11bace9e586f52743e98047b1f paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.271726087+08:00] loaded container                              container=6537ce5ae3688ee750adc2d9f157992b839f702a2c5b7b68b9e1fc93890c802b paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.272652297+08:00] loaded container                              container=c25097579654e457933453beb54036e1a4793cb7d28690d798b6ca06c7c81f93 paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.273613863+08:00] loaded container                              container=eda43d1d856fa4ea74df84bb7f05f782d7591a680c38213974a756055eb68f2c paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.328623040+08:00] restoring container                           container=6537ce5ae3688ee750adc2d9f157992b839f702a2c5b7b68b9e1fc93890c802b paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.334741870+08:00] restoring container                           container=08e5723d475b2ee8754bb85f4a7f47c41c0dc602a531460c4b77e6374a76fd8d paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.343438756+08:00] restoring container                           container=34a84057691d8e1f25755e95842db66bcb21b1a9572ba45e33e208fcd6ea37d5 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.352181053+08:00] restoring container                           container=c25097579654e457933453beb54036e1a4793cb7d28690d798b6ca06c7c81f93 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.360048134+08:00] restoring container                           container=eda43d1d856fa4ea74df84bb7f05f782d7591a680c38213974a756055eb68f2c paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.366867825+08:00] restoring container                           container=f499cddf6d78870b4b9ba422ed1d4425997aee52a06ae99a666e2d7ebcd0debe paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.372067287+08:00] restoring container                           container=257d39cf15997dc2f103caa60954d3927e232aec92a55394985557cd49e95ecc paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.377909875+08:00] restoring container                           container=31520944f8906861f7d0340a5da962ceeee0e8a86d8aff5e5f1e4e4ef090b650 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.383392799+08:00] restoring container                           container=5db4bfe59ba15b1aee101f6791c492e8fc446f11bace9e586f52743e98047b1f paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384322666+08:00] alive: false                                  container=31520944f8906861f7d0340a5da962ceeee0e8a86d8aff5e5f1e4e4ef090b650 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384411496+08:00] done restoring container                      container=31520944f8906861f7d0340a5da962ceeee0e8a86d8aff5e5f1e4e4ef090b650 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384497364+08:00] alive: false                                  container=5db4bfe59ba15b1aee101f6791c492e8fc446f11bace9e586f52743e98047b1f paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384514082+08:00] done restoring container                      container=5db4bfe59ba15b1aee101f6791c492e8fc446f11bace9e586f52743e98047b1f paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384536982+08:00] alive: false                                  container=6537ce5ae3688ee750adc2d9f157992b839f702a2c5b7b68b9e1fc93890c802b paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384589149+08:00] done restoring container                      container=6537ce5ae3688ee750adc2d9f157992b839f702a2c5b7b68b9e1fc93890c802b paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384612486+08:00] alive: false                                  container=08e5723d475b2ee8754bb85f4a7f47c41c0dc602a531460c4b77e6374a76fd8d paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384648980+08:00] done restoring container                      container=08e5723d475b2ee8754bb85f4a7f47c41c0dc602a531460c4b77e6374a76fd8d paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384672572+08:00] alive: false                                  container=34a84057691d8e1f25755e95842db66bcb21b1a9572ba45e33e208fcd6ea37d5 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384709004+08:00] done restoring container                      container=34a84057691d8e1f25755e95842db66bcb21b1a9572ba45e33e208fcd6ea37d5 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384749849+08:00] alive: false                                  container=c25097579654e457933453beb54036e1a4793cb7d28690d798b6ca06c7c81f93 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384782402+08:00] done restoring container                      container=c25097579654e457933453beb54036e1a4793cb7d28690d798b6ca06c7c81f93 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384831815+08:00] alive: false                                  container=eda43d1d856fa4ea74df84bb7f05f782d7591a680c38213974a756055eb68f2c paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384844843+08:00] done restoring container                      container=eda43d1d856fa4ea74df84bb7f05f782d7591a680c38213974a756055eb68f2c paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384889707+08:00] alive: false                                  container=f499cddf6d78870b4b9ba422ed1d4425997aee52a06ae99a666e2d7ebcd0debe paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384924570+08:00] done restoring container                      container=f499cddf6d78870b4b9ba422ed1d4425997aee52a06ae99a666e2d7ebcd0debe paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384978063+08:00] alive: false                                  container=257d39cf15997dc2f103caa60954d3927e232aec92a55394985557cd49e95ecc paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.385011841+08:00] done restoring container                      container=257d39cf15997dc2f103caa60954d3927e232aec92a55394985557cd49e95ecc paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.385058226+08:00] Option Experimental: false</span><br><span class="line">DEBU[2022-02-03T00:57:30.385095290+08:00] Option DefaultDriver: bridge</span><br><span class="line">DEBU[2022-02-03T00:57:30.385103316+08:00] Option DefaultNetwork: bridge</span><br><span class="line">DEBU[2022-02-03T00:57:30.385135579+08:00] Network Control Plane MTU: 1500</span><br><span class="line">WARN[2022-02-03T00:57:30.387074890+08:00] Running modprobe bridge br_netfilter failed with message: modprobe: WARNING: Module br_netfilter not found in directory /lib/modules/5.4.0-77-generic</span><br><span class="line">, error: exit status 1</span><br><span class="line">WARN[2022-02-03T00:57:30.391436976+08:00] Running iptables --wait -t nat -L -n failed with message: `modprobe: FATAL: Module ip_tables not found in directory /lib/modules/5.4.0-77-generic</span><br><span class="line">iptables v1.8.4 (legacy): can&#x27;t initialize iptables table `nat&#x27;: Table does not exist (do you need to insmod?)</span><br><span class="line">Perhaps iptables or your kernel needs to be upgraded.`, error: exit status 3</span><br><span class="line">DEBU[2022-02-03T00:57:30.397357303+08:00] /usr/sbin/iptables, [-t filter -C FORWARD -j DOCKER-ISOLATION]</span><br><span class="line">DEBU[2022-02-03T00:57:30.400690467+08:00] /usr/sbin/iptables, [-t nat -D PREROUTING -m addrtype --dst-type LOCAL -j DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.411769946+08:00] /usr/sbin/iptables, [-t nat -D OUTPUT -m addrtype --dst-type LOCAL ! --dst 127.0.0.0/8 -j DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.423060451+08:00] /usr/sbin/iptables, [-t nat -D OUTPUT -m addrtype --dst-type LOCAL -j DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.434681947+08:00] /usr/sbin/iptables, [-t nat -D PREROUTING]</span><br><span class="line">DEBU[2022-02-03T00:57:30.438556532+08:00] /usr/sbin/iptables, [-t nat -D OUTPUT]</span><br><span class="line">DEBU[2022-02-03T00:57:30.442091291+08:00] /usr/sbin/iptables, [-t nat -F DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.445419314+08:00] /usr/sbin/iptables, [-t nat -X DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.448885727+08:00] /usr/sbin/iptables, [-t filter -F DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.452328114+08:00] /usr/sbin/iptables, [-t filter -X DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.456372710+08:00] /usr/sbin/iptables, [-t filter -F DOCKER-ISOLATION-STAGE-1]</span><br><span class="line">DEBU[2022-02-03T00:57:30.459847434+08:00] /usr/sbin/iptables, [-t filter -X DOCKER-ISOLATION-STAGE-1]</span><br><span class="line">DEBU[2022-02-03T00:57:30.463195322+08:00] /usr/sbin/iptables, [-t filter -F DOCKER-ISOLATION-STAGE-2]</span><br><span class="line">DEBU[2022-02-03T00:57:30.466640713+08:00] /usr/sbin/iptables, [-t filter -X DOCKER-ISOLATION-STAGE-2]</span><br><span class="line">DEBU[2022-02-03T00:57:30.469992937+08:00] /usr/sbin/iptables, [-t filter -F DOCKER-ISOLATION]</span><br><span class="line">DEBU[2022-02-03T00:57:30.473415734+08:00] /usr/sbin/iptables, [-t filter -X DOCKER-ISOLATION]</span><br><span class="line">DEBU[2022-02-03T00:57:30.476868678+08:00] /usr/sbin/iptables, [-t nat -n -L DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.480249405+08:00] /usr/sbin/iptables, [-t nat -N DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.483645172+08:00] daemon configured with a 15 seconds minimum shutdown timeout</span><br><span class="line">DEBU[2022-02-03T00:57:30.483731011+08:00] start clean shutdown of all containers with a 15 seconds timeout...</span><br><span class="line">DEBU[2022-02-03T00:57:30.484045148+08:00] found 0 orphan layers</span><br><span class="line">DEBU[2022-02-03T00:57:30.484360428+08:00] Cleaning up old mountid : start.</span><br><span class="line">DEBU[2022-02-03T00:57:30.484570389+08:00] Cleaning up old mountid : done.</span><br><span class="line">failed to start daemon: Error initializing network controller: error obtaining controller instance: failed to create NAT chain DOCKER: iptables failed: iptables -t nat -N DOCKER: modprobe: FATAL: Module ip_tables not found in directory /lib/modules/5.4.0-77-generic</span><br><span class="line">iptables v1.8.4 (legacy): can&#x27;t initialize iptables table `nat&#x27;: Table does not exist (do you need to insmod?)</span><br><span class="line">Perhaps iptables or your kernel needs to be upgraded.</span><br><span class="line"> (exit status 3)</span><br></pre></td></tr></table></figure>
 
-<h3 id="测试效果"><a href="#测试效果" class="headerlink" title="测试效果"></a>测试效果</h3><p>使用ip+端口号访问提示404</p>
-<p><img src="/posts/docker-qinglong/5.png"></p>
-<p>使用域名+端口号访问则正常</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>虽然这样可以防止5700端口被爆破，但是这样配置起来也挺麻烦，配置完后重启容器配置还会清空，如果能直接修改青龙面板的映射端口是更优解。</p>
+<p>看到日志提示”iptables”报错，尝试排查iptables</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@ubuntu:~# iptables --list</span><br><span class="line">modprobe: FATAL: Module ip_tables not found in directory /lib/modules/5.4.0-77-generic</span><br><span class="line">iptables v1.8.4 (legacy): can&#x27;t initialize iptables table `filter&#x27;: Table does not exist (do you need to insmod?)</span><br><span class="line">Perhaps iptables or your kernel needs to be upgraded.</span><br></pre></td></tr></table></figure>
+
+<p>看到这里意识到不对劲，可能备份快照的时候损坏了系统？难道是内核出问题了？不过还是不死心，尝试更新系统软件包看看能不能重新启动。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt update		#刷新存储库索引</span><br><span class="line">apt upgrade		#更新系统软件包</span><br></pre></td></tr></table></figure>
+
+<p>检查到这里，我觉得我可能没办法修好它了，不过好在这是云服务器，可以重置镜像。</p>
+<h1 id="备份Docker相关文件"><a href="#备份Docker相关文件" class="headerlink" title="备份Docker相关文件"></a>备份Docker相关文件</h1><p>使用tar命令备份我映射的Docker文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -cvf docker.tar /docker</span><br></pre></td></tr></table></figure>
+
+<p>使用tar文件备份Docker 镜像和容器的存储路径</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -zcvf docker.tar.gz /var/lib/docker</span><br></pre></td></tr></table></figure>
+
+<p>使用SFTP工具将备份文件拷贝到本地<br>参考：</p>
+<h1 id="重新部署服务器"><a href="#重新部署服务器" class="headerlink" title="重新部署服务器"></a>重新部署服务器</h1><p>进入控制台重置镜像<br>​</p>
+<p>重新安装docker</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt upgrade</span><br><span class="line">apt install docker.io</span><br></pre></td></tr></table></figure>
+
+<p>附：apt命令（尽量使用apt而不是apt-get）</p>
+<table>
+<thead>
+<tr>
+<th>apt 命令</th>
+<th>取代的命令</th>
+<th>命令的功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apt install</td>
+<td>apt-get install</td>
+<td>安装软件包</td>
+</tr>
+<tr>
+<td>apt remove</td>
+<td>apt-get remove</td>
+<td>移除软件包</td>
+</tr>
+<tr>
+<td>apt purge</td>
+<td>apt-get purge</td>
+<td>移除软件包及配置文件</td>
+</tr>
+<tr>
+<td>apt update</td>
+<td>apt-get update</td>
+<td>刷新存储库索引</td>
+</tr>
+<tr>
+<td>apt upgrade</td>
+<td>apt-get upgrade</td>
+<td>升级所有可升级的软件包</td>
+</tr>
+<tr>
+<td>apt autoremove</td>
+<td>apt-get autoremove</td>
+<td>自动删除不需要的包</td>
+</tr>
+<tr>
+<td>apt full-upgrade</td>
+<td>apt-get dist-upgrade</td>
+<td>在升级软件包时自动处理依赖关系</td>
+</tr>
+<tr>
+<td>apt search</td>
+<td>apt-cache search</td>
+<td>搜索应用程序</td>
+</tr>
+<tr>
+<td>apt show</td>
+<td>apt-cache show</td>
+<td>显示装细节</td>
+</tr>
+</tbody></table>
+<p>复制刚才备份的文件到服务器，并解压到原来位置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xvf docker.tar</span><br><span class="line">tar -zxvf docker.tar.gz </span><br></pre></td></tr></table></figure>
+
+<p>恢复好文件后，reboot重启主机<br>开机之后使用docker ps查看容器列表，发现之前的容器都回来了<br>​</p>
+<p>服务器基本修复了，但是因为重新启动的原因，docker的bridge网络下容器的IP会有所变化，可能某些细节需要一点点时间修复。</p>
 ]]></content>
       <categories>
         <category>记录</category>
       </categories>
       <tags>
         <tag>折腾</tag>
-        <tag>Docker</tag>
-        <tag>云服务器</tag>
-        <tag>薅羊毛</tag>
-        <tag>青龙面板</tag>
+        <tag>翻车</tag>
       </tags>
   </entry>
   <entry>
@@ -380,111 +483,8 @@
       </tags>
   </entry>
   <entry>
-    <title>记一次Linux云服务器异常修复</title>
-    <url>/posts/linuxserver-fix/</url>
-    <content><![CDATA[<h1 id="异常表现"><a href="#异常表现" class="headerlink" title="异常表现"></a>异常表现</h1><p>手贱恢复过一次快照后，发现docker无法启动<br>服务器中所有服务都基于docker搭建，所以恢复docker功能就能解决问题</p>
-<h1 id="尝试排查并解决问题"><a href="#尝试排查并解决问题" class="headerlink" title="尝试排查并解决问题"></a>尝试排查并解决问题</h1><p>尝试重启docker</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
-
-<p>系统提示</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Job for docker.service failed because the control process exited with error code.</span><br><span class="line">See &quot;systemctl status docker.service&quot; and &quot;journalctl -xe&quot; for details.</span><br></pre></td></tr></table></figure>
-
-<p>根据提示输入命令查看报错</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@ubuntu:~# systemctl status docker.service</span><br><span class="line"></span><br><span class="line">● docker.service - Docker Application Container Engine</span><br><span class="line">     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)</span><br><span class="line">     Active: failed (Result: exit-code) since Thu 2022-02-03 00:55:32 CST; 54s ago</span><br><span class="line">TriggeredBy: ● docker.socket</span><br><span class="line">       Docs: https://docs.docker.com</span><br><span class="line">    Process: 340597 ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock (code=exited, status=1/FAILURE)</span><br><span class="line">   Main PID: 340597 (code=exited, status=1/FAILURE)</span><br><span class="line"></span><br><span class="line">Feb 03 00:55:30 VM-8-10-ubuntu systemd[1]: docker.service: Main process exited, code=exited, status=1/FAILURE</span><br><span class="line">Feb 03 00:55:30 VM-8-10-ubuntu systemd[1]: docker.service: Failed with result &#x27;exit-code&#x27;.</span><br><span class="line">Feb 03 00:55:30 VM-8-10-ubuntu systemd[1]: Failed to start Docker Application Container Engine.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: docker.service: Scheduled restart job, restart counter is at 3.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: Stopped Docker Application Container Engine.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: docker.service: Start request repeated too quickly.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: docker.service: Failed with result &#x27;exit-code&#x27;.</span><br><span class="line">Feb 03 00:55:32 VM-8-10-ubuntu systemd[1]: Failed to start Docker Application Container Engine.</span><br></pre></td></tr></table></figure>
-
-<p>看不出什么有用信息，继续排查</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@:~# dockerd --debug</span><br><span class="line"></span><br><span class="line">INFO[2022-02-03T00:57:30.200810403+08:00] Starting up</span><br><span class="line">DEBU[2022-02-03T00:57:30.201601472+08:00] Listener created for HTTP on unix (/var/run/docker.sock)</span><br><span class="line">INFO[2022-02-03T00:57:30.203362974+08:00] detected 127.0.0.53 nameserver, assuming systemd-resolved, so using resolv.conf: /run/systemd/resolve/resolv.conf</span><br><span class="line">DEBU[2022-02-03T00:57:30.203766518+08:00] Golang&#x27;s threads limit set to 13590</span><br><span class="line">INFO[2022-02-03T00:57:30.204089641+08:00] parsed scheme: &quot;unix&quot;                         module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.204159640+08:00] scheme &quot;unix&quot; not registered, fallback to default scheme  module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.204224276+08:00] ccResolverWrapper: sending update to cc: &#123;[&#123;unix:///run/containerd/containerd.sock  &lt;nil&gt; 0 &lt;nil&gt;&#125;] &lt;nil&gt; &lt;nil&gt;&#125;  module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.204282462+08:00] ClientConn switching balancer to &quot;pick_first&quot;  module=grpc</span><br><span class="line">DEBU[2022-02-03T00:57:30.204722973+08:00] metrics API listening on /var/run/docker/metrics.sock</span><br><span class="line">INFO[2022-02-03T00:57:30.205634189+08:00] parsed scheme: &quot;unix&quot;                         module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.205706673+08:00] scheme &quot;unix&quot; not registered, fallback to default scheme  module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.205760302+08:00] ccResolverWrapper: sending update to cc: &#123;[&#123;unix:///run/containerd/containerd.sock  &lt;nil&gt; 0 &lt;nil&gt;&#125;] &lt;nil&gt; &lt;nil&gt;&#125;  module=grpc</span><br><span class="line">INFO[2022-02-03T00:57:30.205810825+08:00] ClientConn switching balancer to &quot;pick_first&quot;  module=grpc</span><br><span class="line">DEBU[2022-02-03T00:57:30.207611945+08:00] Using default logging driver json-file</span><br><span class="line">DEBU[2022-02-03T00:57:30.207775882+08:00] [graphdriver] priority list: [btrfs zfs overlay2 fuse-overlayfs aufs overlay devicemapper vfs]</span><br><span class="line">DEBU[2022-02-03T00:57:30.222527765+08:00] processing event stream                       module=libcontainerd namespace=plugins.moby</span><br><span class="line">DEBU[2022-02-03T00:57:30.250229294+08:00] backingFs=extfs, projectQuotaSupported=false, indexOff=&quot;index=off,&quot;, userxattr=&quot;&quot;  storage-driver=overlay2</span><br><span class="line">INFO[2022-02-03T00:57:30.250411749+08:00] [graphdriver] using prior storage driver: overlay2</span><br><span class="line">DEBU[2022-02-03T00:57:30.250511448+08:00] Initialized graph driver overlay2</span><br><span class="line">DEBU[2022-02-03T00:57:30.258155291+08:00] No quota support for local volumes in /var/lib/docker/volumes: Filesystem does not support, or has not enabled quotas</span><br><span class="line">WARN[2022-02-03T00:57:30.262367778+08:00] Your kernel does not support swap memory limit</span><br><span class="line">WARN[2022-02-03T00:57:30.262458822+08:00] Your kernel does not support CPU realtime scheduler</span><br><span class="line">WARN[2022-02-03T00:57:30.262516430+08:00] Your kernel does not support cgroup blkio weight</span><br><span class="line">WARN[2022-02-03T00:57:30.262560163+08:00] Your kernel does not support cgroup blkio weight_device</span><br><span class="line">DEBU[2022-02-03T00:57:30.262722171+08:00] Max Concurrent Downloads: 3</span><br><span class="line">DEBU[2022-02-03T00:57:30.262773010+08:00] Max Concurrent Uploads: 5</span><br><span class="line">DEBU[2022-02-03T00:57:30.262811831+08:00] Max Download Attempts: 5</span><br><span class="line">INFO[2022-02-03T00:57:30.262858770+08:00] Loading containers: start.</span><br><span class="line">DEBU[2022-02-03T00:57:30.264578215+08:00] loaded container                              container=f499cddf6d78870b4b9ba422ed1d4425997aee52a06ae99a666e2d7ebcd0debe paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.264733549+08:00] processing event stream                       module=libcontainerd namespace=moby</span><br><span class="line">DEBU[2022-02-03T00:57:30.265684915+08:00] loaded container                              container=08e5723d475b2ee8754bb85f4a7f47c41c0dc602a531460c4b77e6374a76fd8d paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.267811775+08:00] loaded container                              container=257d39cf15997dc2f103caa60954d3927e232aec92a55394985557cd49e95ecc paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.268752637+08:00] loaded container                              container=31520944f8906861f7d0340a5da962ceeee0e8a86d8aff5e5f1e4e4ef090b650 paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.269713929+08:00] loaded container                              container=34a84057691d8e1f25755e95842db66bcb21b1a9572ba45e33e208fcd6ea37d5 paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.270763037+08:00] loaded container                              container=5db4bfe59ba15b1aee101f6791c492e8fc446f11bace9e586f52743e98047b1f paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.271726087+08:00] loaded container                              container=6537ce5ae3688ee750adc2d9f157992b839f702a2c5b7b68b9e1fc93890c802b paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.272652297+08:00] loaded container                              container=c25097579654e457933453beb54036e1a4793cb7d28690d798b6ca06c7c81f93 paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.273613863+08:00] loaded container                              container=eda43d1d856fa4ea74df84bb7f05f782d7591a680c38213974a756055eb68f2c paused=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.328623040+08:00] restoring container                           container=6537ce5ae3688ee750adc2d9f157992b839f702a2c5b7b68b9e1fc93890c802b paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.334741870+08:00] restoring container                           container=08e5723d475b2ee8754bb85f4a7f47c41c0dc602a531460c4b77e6374a76fd8d paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.343438756+08:00] restoring container                           container=34a84057691d8e1f25755e95842db66bcb21b1a9572ba45e33e208fcd6ea37d5 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.352181053+08:00] restoring container                           container=c25097579654e457933453beb54036e1a4793cb7d28690d798b6ca06c7c81f93 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.360048134+08:00] restoring container                           container=eda43d1d856fa4ea74df84bb7f05f782d7591a680c38213974a756055eb68f2c paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.366867825+08:00] restoring container                           container=f499cddf6d78870b4b9ba422ed1d4425997aee52a06ae99a666e2d7ebcd0debe paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.372067287+08:00] restoring container                           container=257d39cf15997dc2f103caa60954d3927e232aec92a55394985557cd49e95ecc paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.377909875+08:00] restoring container                           container=31520944f8906861f7d0340a5da962ceeee0e8a86d8aff5e5f1e4e4ef090b650 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.383392799+08:00] restoring container                           container=5db4bfe59ba15b1aee101f6791c492e8fc446f11bace9e586f52743e98047b1f paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384322666+08:00] alive: false                                  container=31520944f8906861f7d0340a5da962ceeee0e8a86d8aff5e5f1e4e4ef090b650 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384411496+08:00] done restoring container                      container=31520944f8906861f7d0340a5da962ceeee0e8a86d8aff5e5f1e4e4ef090b650 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384497364+08:00] alive: false                                  container=5db4bfe59ba15b1aee101f6791c492e8fc446f11bace9e586f52743e98047b1f paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384514082+08:00] done restoring container                      container=5db4bfe59ba15b1aee101f6791c492e8fc446f11bace9e586f52743e98047b1f paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384536982+08:00] alive: false                                  container=6537ce5ae3688ee750adc2d9f157992b839f702a2c5b7b68b9e1fc93890c802b paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384589149+08:00] done restoring container                      container=6537ce5ae3688ee750adc2d9f157992b839f702a2c5b7b68b9e1fc93890c802b paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384612486+08:00] alive: false                                  container=08e5723d475b2ee8754bb85f4a7f47c41c0dc602a531460c4b77e6374a76fd8d paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384648980+08:00] done restoring container                      container=08e5723d475b2ee8754bb85f4a7f47c41c0dc602a531460c4b77e6374a76fd8d paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384672572+08:00] alive: false                                  container=34a84057691d8e1f25755e95842db66bcb21b1a9572ba45e33e208fcd6ea37d5 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384709004+08:00] done restoring container                      container=34a84057691d8e1f25755e95842db66bcb21b1a9572ba45e33e208fcd6ea37d5 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384749849+08:00] alive: false                                  container=c25097579654e457933453beb54036e1a4793cb7d28690d798b6ca06c7c81f93 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384782402+08:00] done restoring container                      container=c25097579654e457933453beb54036e1a4793cb7d28690d798b6ca06c7c81f93 paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384831815+08:00] alive: false                                  container=eda43d1d856fa4ea74df84bb7f05f782d7591a680c38213974a756055eb68f2c paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384844843+08:00] done restoring container                      container=eda43d1d856fa4ea74df84bb7f05f782d7591a680c38213974a756055eb68f2c paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384889707+08:00] alive: false                                  container=f499cddf6d78870b4b9ba422ed1d4425997aee52a06ae99a666e2d7ebcd0debe paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384924570+08:00] done restoring container                      container=f499cddf6d78870b4b9ba422ed1d4425997aee52a06ae99a666e2d7ebcd0debe paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.384978063+08:00] alive: false                                  container=257d39cf15997dc2f103caa60954d3927e232aec92a55394985557cd49e95ecc paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.385011841+08:00] done restoring container                      container=257d39cf15997dc2f103caa60954d3927e232aec92a55394985557cd49e95ecc paused=false restarting=false running=false</span><br><span class="line">DEBU[2022-02-03T00:57:30.385058226+08:00] Option Experimental: false</span><br><span class="line">DEBU[2022-02-03T00:57:30.385095290+08:00] Option DefaultDriver: bridge</span><br><span class="line">DEBU[2022-02-03T00:57:30.385103316+08:00] Option DefaultNetwork: bridge</span><br><span class="line">DEBU[2022-02-03T00:57:30.385135579+08:00] Network Control Plane MTU: 1500</span><br><span class="line">WARN[2022-02-03T00:57:30.387074890+08:00] Running modprobe bridge br_netfilter failed with message: modprobe: WARNING: Module br_netfilter not found in directory /lib/modules/5.4.0-77-generic</span><br><span class="line">, error: exit status 1</span><br><span class="line">WARN[2022-02-03T00:57:30.391436976+08:00] Running iptables --wait -t nat -L -n failed with message: `modprobe: FATAL: Module ip_tables not found in directory /lib/modules/5.4.0-77-generic</span><br><span class="line">iptables v1.8.4 (legacy): can&#x27;t initialize iptables table `nat&#x27;: Table does not exist (do you need to insmod?)</span><br><span class="line">Perhaps iptables or your kernel needs to be upgraded.`, error: exit status 3</span><br><span class="line">DEBU[2022-02-03T00:57:30.397357303+08:00] /usr/sbin/iptables, [-t filter -C FORWARD -j DOCKER-ISOLATION]</span><br><span class="line">DEBU[2022-02-03T00:57:30.400690467+08:00] /usr/sbin/iptables, [-t nat -D PREROUTING -m addrtype --dst-type LOCAL -j DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.411769946+08:00] /usr/sbin/iptables, [-t nat -D OUTPUT -m addrtype --dst-type LOCAL ! --dst 127.0.0.0/8 -j DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.423060451+08:00] /usr/sbin/iptables, [-t nat -D OUTPUT -m addrtype --dst-type LOCAL -j DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.434681947+08:00] /usr/sbin/iptables, [-t nat -D PREROUTING]</span><br><span class="line">DEBU[2022-02-03T00:57:30.438556532+08:00] /usr/sbin/iptables, [-t nat -D OUTPUT]</span><br><span class="line">DEBU[2022-02-03T00:57:30.442091291+08:00] /usr/sbin/iptables, [-t nat -F DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.445419314+08:00] /usr/sbin/iptables, [-t nat -X DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.448885727+08:00] /usr/sbin/iptables, [-t filter -F DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.452328114+08:00] /usr/sbin/iptables, [-t filter -X DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.456372710+08:00] /usr/sbin/iptables, [-t filter -F DOCKER-ISOLATION-STAGE-1]</span><br><span class="line">DEBU[2022-02-03T00:57:30.459847434+08:00] /usr/sbin/iptables, [-t filter -X DOCKER-ISOLATION-STAGE-1]</span><br><span class="line">DEBU[2022-02-03T00:57:30.463195322+08:00] /usr/sbin/iptables, [-t filter -F DOCKER-ISOLATION-STAGE-2]</span><br><span class="line">DEBU[2022-02-03T00:57:30.466640713+08:00] /usr/sbin/iptables, [-t filter -X DOCKER-ISOLATION-STAGE-2]</span><br><span class="line">DEBU[2022-02-03T00:57:30.469992937+08:00] /usr/sbin/iptables, [-t filter -F DOCKER-ISOLATION]</span><br><span class="line">DEBU[2022-02-03T00:57:30.473415734+08:00] /usr/sbin/iptables, [-t filter -X DOCKER-ISOLATION]</span><br><span class="line">DEBU[2022-02-03T00:57:30.476868678+08:00] /usr/sbin/iptables, [-t nat -n -L DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.480249405+08:00] /usr/sbin/iptables, [-t nat -N DOCKER]</span><br><span class="line">DEBU[2022-02-03T00:57:30.483645172+08:00] daemon configured with a 15 seconds minimum shutdown timeout</span><br><span class="line">DEBU[2022-02-03T00:57:30.483731011+08:00] start clean shutdown of all containers with a 15 seconds timeout...</span><br><span class="line">DEBU[2022-02-03T00:57:30.484045148+08:00] found 0 orphan layers</span><br><span class="line">DEBU[2022-02-03T00:57:30.484360428+08:00] Cleaning up old mountid : start.</span><br><span class="line">DEBU[2022-02-03T00:57:30.484570389+08:00] Cleaning up old mountid : done.</span><br><span class="line">failed to start daemon: Error initializing network controller: error obtaining controller instance: failed to create NAT chain DOCKER: iptables failed: iptables -t nat -N DOCKER: modprobe: FATAL: Module ip_tables not found in directory /lib/modules/5.4.0-77-generic</span><br><span class="line">iptables v1.8.4 (legacy): can&#x27;t initialize iptables table `nat&#x27;: Table does not exist (do you need to insmod?)</span><br><span class="line">Perhaps iptables or your kernel needs to be upgraded.</span><br><span class="line"> (exit status 3)</span><br></pre></td></tr></table></figure>
-
-<p>看到日志提示”iptables”报错，尝试排查iptables</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@ubuntu:~# iptables --list</span><br><span class="line">modprobe: FATAL: Module ip_tables not found in directory /lib/modules/5.4.0-77-generic</span><br><span class="line">iptables v1.8.4 (legacy): can&#x27;t initialize iptables table `filter&#x27;: Table does not exist (do you need to insmod?)</span><br><span class="line">Perhaps iptables or your kernel needs to be upgraded.</span><br></pre></td></tr></table></figure>
-
-<p>看到这里意识到不对劲，可能备份快照的时候损坏了系统？难道是内核出问题了？不过还是不死心，尝试更新系统软件包看看能不能重新启动。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt update		#刷新存储库索引</span><br><span class="line">apt upgrade		#更新系统软件包</span><br></pre></td></tr></table></figure>
-
-<p>检查到这里，我觉得我可能没办法修好它了，不过好在这是云服务器，可以重置镜像。</p>
-<h1 id="备份Docker相关文件"><a href="#备份Docker相关文件" class="headerlink" title="备份Docker相关文件"></a>备份Docker相关文件</h1><p>使用tar命令备份我映射的Docker文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -cvf docker.tar /docker</span><br></pre></td></tr></table></figure>
-
-<p>使用tar文件备份Docker 镜像和容器的存储路径</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -zcvf docker.tar.gz /var/lib/docker</span><br></pre></td></tr></table></figure>
-
-<p>使用SFTP工具将备份文件拷贝到本地<br>参考：</p>
-<h1 id="重新部署服务器"><a href="#重新部署服务器" class="headerlink" title="重新部署服务器"></a>重新部署服务器</h1><p>进入控制台重置镜像<br>​</p>
-<p>重新安装docker</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt upgrade</span><br><span class="line">apt install docker.io</span><br></pre></td></tr></table></figure>
-
-<p>附：apt命令（尽量使用apt而不是apt-get）</p>
-<table>
-<thead>
-<tr>
-<th>apt 命令</th>
-<th>取代的命令</th>
-<th>命令的功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>apt install</td>
-<td>apt-get install</td>
-<td>安装软件包</td>
-</tr>
-<tr>
-<td>apt remove</td>
-<td>apt-get remove</td>
-<td>移除软件包</td>
-</tr>
-<tr>
-<td>apt purge</td>
-<td>apt-get purge</td>
-<td>移除软件包及配置文件</td>
-</tr>
-<tr>
-<td>apt update</td>
-<td>apt-get update</td>
-<td>刷新存储库索引</td>
-</tr>
-<tr>
-<td>apt upgrade</td>
-<td>apt-get upgrade</td>
-<td>升级所有可升级的软件包</td>
-</tr>
-<tr>
-<td>apt autoremove</td>
-<td>apt-get autoremove</td>
-<td>自动删除不需要的包</td>
-</tr>
-<tr>
-<td>apt full-upgrade</td>
-<td>apt-get dist-upgrade</td>
-<td>在升级软件包时自动处理依赖关系</td>
-</tr>
-<tr>
-<td>apt search</td>
-<td>apt-cache search</td>
-<td>搜索应用程序</td>
-</tr>
-<tr>
-<td>apt show</td>
-<td>apt-cache show</td>
-<td>显示装细节</td>
-</tr>
-</tbody></table>
-<p>复制刚才备份的文件到服务器，并解压到原来位置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xvf docker.tar</span><br><span class="line">tar -zxvf docker.tar.gz </span><br></pre></td></tr></table></figure>
-
-<p>恢复好文件后，reboot重启主机<br>开机之后使用docker ps查看容器列表，发现之前的容器都回来了<br>​</p>
-<p>服务器基本修复了，但是因为重新启动的原因，docker的bridge网络下容器的IP会有所变化，可能某些细节需要一点点时间修复。</p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>折腾</tag>
-        <tag>翻车</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>socks5&amp;http_proxy代理</title>
-    <url>/posts/socks5&amp;http_proxy/</url>
+    <title>socks5和http代理</title>
+    <url>/posts/socks5-http-proxy/</url>
     <content><![CDATA[<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://zgao.top/%E5%A5%87%E5%AE%89%E4%BF%A1%E5%AE%9E%E4%B9%A0%E4%BA%94-socks5%E5%8D%8F%E8%AE%AE%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/">《奇安信实习(五)-Socks5协议抓包分析》</a><br><a href="https://reezon.github.io/2018/05/23/%E5%85%B3%E4%BA%8Ess(%E9%85%B8%E9%85%B8)%E5%92%8Cssr(%E9%85%B8%E9%85%B8%E4%B9%B3)%EF%BC%8C%E8%BF%98%E6%9C%89vpn%E5%92%8Csocks5/">《关于ss(酸酸)和ssr(酸酸乳)，还有vpn和socks5》</a></p>
 <h2 id="Socks5-代理"><a href="#Socks5-代理" class="headerlink" title="Socks5 代理"></a>Socks5 代理</h2><ul>
 <li>socks(socket security)是一种网络传输协议，它工作在OSI七层模型中的第五层/会话层。</li>
@@ -515,7 +515,7 @@
 <li>socks5使用握手协议来通知代理软件其客户端试图进行的socks连接，然后尽可能透明地进行操作（不对请求或响应进行修改），而HTTP代理可能会解释和重写报头</li>
 <li>socks5代理支持UDP协议，而HTTP代理不能</li>
 </ul>
-<h2 id="网络示意图"><a href="#网络示意图" class="headerlink" title="网络示意图"></a>网络示意图</h2><p><img src="socks5&http_proxy/1.png"></p>
+<h2 id="网络示意图"><a href="#网络示意图" class="headerlink" title="网络示意图"></a>网络示意图</h2><p><img src="/posts/socks5-http-proxy/1.png"></p>
 <h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>搭建socks5和HTTP代理（Clash Docker版）</p>
 <p>代理：Socks5代理（IP：172.16.7.233:7891）HTTP代理（IP：172.16.7.233:7890）<br>目标网站：<a href="http://172.16.3.9/backend/getIP.php">http://172.16.3.9/backend/getIP.php</a>（可返回访问者IP）</p>
 <p>软件环境：Win10系统电脑、SSTAP、WireShark、CURL<br>​</p>
@@ -524,24 +524,24 @@
 <p>Q：为什么选择SSATP作为代理客户端软件？<br>A：因为SSTAP使用的代理模式是利用虚拟网卡技术在网络层实现的代理工具，所有流量都会被转到虚拟网卡上，这样方便分析所有流量。<br>​</p>
 <p>Q：为什么使用Clash作为代理服务端？<br>A：因为Clash自带HTTP和Socks5代理，简单配置一下就能用。</p>
 <h2 id="流量分析"><a href="#流量分析" class="headerlink" title="流量分析"></a>流量分析</h2><p>Socks5代理可以设置密码认证，但是认证时客户端发给服务端的账号密码走TCP协议进行明文传输。</p>
-<h3 id="无Socks5代理-无HTTP代理"><a href="#无Socks5代理-无HTTP代理" class="headerlink" title="无Socks5代理 无HTTP代理"></a>无Socks5代理 无HTTP代理</h3><p><img src="socks5&http_proxy/2.png"><br>此时目标网站返回的IP为我的真实IP。</p>
+<h3 id="无Socks5代理-无HTTP代理"><a href="#无Socks5代理-无HTTP代理" class="headerlink" title="无Socks5代理 无HTTP代理"></a>无Socks5代理 无HTTP代理</h3><p><img src="/posts/socks5-http-proxy/2.png"><br>此时目标网站返回的IP为我的真实IP。</p>
 <h3 id="开启Socks5代理-无HTTP代理"><a href="#开启Socks5代理-无HTTP代理" class="headerlink" title="开启Socks5代理 无HTTP代理"></a>开启Socks5代理 无HTTP代理</h3><p>curl设置socks5代理方式</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl &lt;要访问的地址&gt; --socks5 &lt;host[:port]&gt; --proxy-user &lt;user:password&gt;</span><br></pre></td></tr></table></figure>
 
-<p><img src="socks5&http_proxy/3.png"></p>
-<p><img src="socks5&http_proxy/4.png"></p>
+<p><img src="/posts/socks5-http-proxy/3.png"></p>
+<p><img src="/posts/socks5-http-proxy/4.png"></p>
 <p>可以看到目标网站返回的IP是我Socks代理的IP，但是我抓到的包中可以看到我的认证账号密码是以明文传输的。<br>密码只由socks服务端用来鉴定客户端是否有权连接，并不用密码对传输的信息进行加密。<br>在TCP三次握手后，建立socks连接，有着极为明显的流量特征（主要体现在TCP报文中的字节流中)。</p>
 <h3 id="开启HTTP代理无socks5代理"><a href="#开启HTTP代理无socks5代理" class="headerlink" title="开启HTTP代理无socks5代理"></a>开启HTTP代理无socks5代理</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl &lt;要访问的地址&gt; -x &lt;host[:port]&gt; --proxy-user &lt;user:password&gt;</span><br></pre></td></tr></table></figure>
 
-<p><img src="socks5&http_proxy/5.png"></p>
+<p><img src="/posts/socks5-http-proxy/5.png"></p>
 <p>仔细看报文，使用HTTP代理时发送的HTTP报文（上图序号4的数据包)</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET http://172.16.3.9/backend/getIP.php</span><br></pre></td></tr></table></figure>
 
 <p>而使用socks代理时，发出的HTTP报文是</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /backend/getIP.php</span><br></pre></td></tr></table></figure>
 
-<p>除此之外，使用HTTP代理时，如果设置了认证，那么在发出HTTP报文的时候会有一个专门的字段Proxy-Authorization来发送账号密码。<br><img src="socks5&http_proxy/6.png"></p>
-<h3 id="开启HTTP代理并开启Socks5代理"><a href="#开启HTTP代理并开启Socks5代理" class="headerlink" title="开启HTTP代理并开启Socks5代理"></a>开启HTTP代理并开启Socks5代理</h3><p>此时开启SSTAP代理本机所有流量到socks代理服务器<br><img src="socks5&http_proxy/7.png"><br>CURL设置HTTP代理<br>WireShark开启抓包<br><img src="socks5&http_proxy/8.png"><br>虽然返回结果是我的代理服务器的IP（我的HTTP和socks代理的IP地址一样），但是实际上流量是走HTTP代理过了一遍。如果HTTP和SOCKS代理为不同IP，则会返回HTTP代理的IP。<br><img src="socks5&http_proxy/9.png"><br>上图物理网卡出口抓到的HTTP报文，和上面的仅使用HTTP代理方式发出的报文一样。</p>
+<p>除此之外，使用HTTP代理时，如果设置了认证，那么在发出HTTP报文的时候会有一个专门的字段Proxy-Authorization来发送账号密码。<br><img src="/posts/socks5-http-proxy/6.png"></p>
+<h3 id="开启HTTP代理并开启Socks5代理"><a href="#开启HTTP代理并开启Socks5代理" class="headerlink" title="开启HTTP代理并开启Socks5代理"></a>开启HTTP代理并开启Socks5代理</h3><p>此时开启SSTAP代理本机所有流量到socks代理服务器<br><img src="/posts/socks5-http-proxy/7.png"><br>CURL设置HTTP代理<br>WireShark开启抓包<br><img src="/posts/socks5-http-proxy/8.png"><br>虽然返回结果是我的代理服务器的IP（我的HTTP和socks代理的IP地址一样），但是实际上流量是走HTTP代理过了一遍。如果HTTP和SOCKS代理为不同IP，则会返回HTTP代理的IP。<br><img src="/posts/socks5-http-proxy/9.png"><br>上图物理网卡出口抓到的HTTP报文，和上面的仅使用HTTP代理方式发出的报文一样。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Socks是个很实用的代理协议，但是在连接建立时、传输流量过程中有着极为明显的流量特征。<br>流量加密、反检测、免杀：</p>
 <ul>
 <li>Socks5+HTTP代理并不会让本来明文传输的浏览加密，但是可以改变请求的IP，服务器看到访问者的IP就是你的代理代理服务器的IP。</li>
@@ -558,10 +558,9 @@
         <category>记录</category>
       </categories>
       <tags>
-        <tag>折腾</tag>
-        <tag>VPN</tag>
-        <tag>隧道</tag>
         <tag>网络</tag>
+        <tag>代理</tag>
+        <tag>流量分析</tag>
       </tags>
   </entry>
   <entry>
